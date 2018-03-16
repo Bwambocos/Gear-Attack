@@ -1,22 +1,22 @@
 // include
 #include <Siv3D.hpp>
-#include "SceneMgr.h"
+#include <HamFramework.hpp>
 #include "Menu.h"
 
-// メニュー初期化
-void Menu_Init()
+// メニュー 初期化
+Menu::Menu(const InitData& init) :IScene(init)
+{
+	image = Texture(U"example\\windmill.png");
+}
+
+// メニュー 更新
+void Menu::update()
 {
 
 }
 
-// メニュー更新
-void Menu_Update()
+// メニュー 描画
+void Menu::draw() const
 {
-
-}
-
-// メニュー描画
-void Menu_Draw()
-{
-
+	image.drawAt(Window::Width() / 2, Window::Height() / 2);
 }

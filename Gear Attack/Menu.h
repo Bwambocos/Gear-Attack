@@ -1,10 +1,16 @@
+// include
 #pragma once
+#include <Siv3D.hpp>
+#include <HamFramework.hpp>
 
-// メニュー初期化
-void Menu_Init();
+// メニュー
+class Menu :public SceneManager<String>::Scene
+{
+private:
+	Texture image;
 
-// メニュー更新
-void Menu_Update();
-
-// メニュー描画
-void Menu_Draw();
+public:
+	Menu(const InitData& init);
+	void update() override;
+	void draw() const override;
+};
