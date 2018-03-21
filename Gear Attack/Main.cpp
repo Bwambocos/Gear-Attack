@@ -3,6 +3,7 @@
 #include <HamFramework.hpp>
 #include "Main.h"
 #include "Menu.h"
+#include "Select.h"
 
 void Main()
 {
@@ -14,6 +15,7 @@ void Main()
 	SceneManager<String> SceneMgr;
 	SceneMgr.setFadeColor(Color(255, 255, 255));
 	SceneMgr.add<Menu>(U"Menu");
+	SceneMgr.add<Select>(U"Select");
 	
 	// メインループ
 	while (System::Update())

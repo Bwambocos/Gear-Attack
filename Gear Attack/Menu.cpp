@@ -26,6 +26,7 @@ void Menu::update()
 	tutorialRect.update();
 	creditRect.update();
 	exitRect.update();
+	if (startRect.leftClicked()) changeScene(U"Select");
 	if (exitRect.leftClicked()) System::Exit();
 }
 
