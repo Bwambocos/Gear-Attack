@@ -31,12 +31,18 @@ void Select::update()
 	{
 		if (i + stageListBeginNum > stageNum) break;
 		stageRect[i].update();
-		if (stageRect[i].leftClicked()) selectedStageNum = i + stageListBeginNum;
+		if (stageRect[i].leftClicked())
+		{
+			selectedStageNum = (selectedStageNum == i + stageListBeginNum ? -1 : i + stageListBeginNum);
+		}
 	}
 	for (auto i : step(4))
 	{
 		diffRect[i].update();
-		if (diffRect[i].leftClicked()) selectedDiffNum = i;
+		if (diffRect[i].leftClicked())
+		{
+			selectedDiffNum = (selectedDiffNum == i ? -1 : i);
+		}
 	}
 	startRect.update();
 	if (stageListBeginNum > 1)
@@ -57,13 +63,11 @@ void Select::draw() const
 	for (auto i : step(3))
 	{
 		if (i + stageListBeginNum > stageNum) break;
-		stageRect[i].drawHighlight();
-		if (i + stageListBeginNum == selectedStageNum) stageRect[i].drawFrame(1, 2, Palette::Aqua);
+		stageRect[i].drawHighlight((i + stageListBeginNum == selectedStageNum ? Color(0, 255, 255) : Color(255, 255, 255)));
 	}
 	for (auto i : step(4))
 	{
-		diffRect[i].drawHighlight();
-		if (i == selectedDiffNum) diffRect[i].drawFrame(1, 2, Palette::Aqua);
+		diffRect[i].drawHighlight((i == selectedDiffNum ? Color(0, 255, 255) : Color(255, 255, 255)));
 	}
 	startRect.drawHighlight();
 	if (stageListBeginNum > 1) goUpTrig.drawHighlight();
@@ -71,7 +75,7 @@ void Select::draw() const
 	titleLine.draw(LineStyle::RoundDot, 3);
 	startLine.draw(LineStyle::RoundDot, 3);
 	centerLine.draw(LineStyle::RoundDot, 3);
-	titleFont(U"ステージと難易度を選択！").drawAt(Window::Width() / 2, 42, Color(255, 165, 64));
+	titleFont(U"ステージと難易度を選択").drawAt(Window::Width() / 2, 42, Color(255, 165, 64));
 	for (auto i : step(3))
 	{
 		if (i + stageListBeginNum > stageNum) break;

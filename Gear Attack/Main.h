@@ -27,11 +27,10 @@ public:
 		m_transition.update(ShapeType::mouseOver());
 	}
 
-	void drawHighlight() const
+	void drawHighlight(Color color = Color(255, 255, 255)) const
 	{
-		ShapeType::drawFrame(0, 2);
-
-		ShapeType::draw(AlphaF(m_transition.value() * 0.25));
+		ShapeType::drawFrame(0, 2, color);
+		ShapeType::draw(Color(color, m_transition.value() * 64));
 	}
 
 	const Transition& getTransition() const
