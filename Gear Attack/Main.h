@@ -30,7 +30,7 @@ public:
 	void drawHighlight(Color color = Color(255, 255, 255)) const
 	{
 		ShapeType::drawFrame(0, 2, color);
-		ShapeType::draw(Color(color, m_transition.value() * 64));
+		ShapeType::draw(Color(color, (uint32)(m_transition.value() * 64)));
 	}
 
 	const Transition& getTransition() const
