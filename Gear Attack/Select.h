@@ -10,12 +10,16 @@ class Select :public SceneManager<String>::Scene
 private:
 	HighlightingShape<Rect> stageRect[3], diffRect[4], startRect;
 	HighlightingShape<Triangle> goUpTrig, goDownTrig;
+	MessageBoxButtons warning;
 	Line titleLine, startLine, centerLine;
 	Font titleFont, stageFont, diffFont, startFont;
-	const String diffString[4] = { U"Ç©ÇÒÇΩÇÒ",U"Ç”Ç¬Ç§",U"ÇﬁÇ∏Ç©ÇµÇ¢",U"ÇﬁÇ∏Ç©ÇµÇ¢Å{" };
+	const String diffString[4] = { U"Ç©ÇÒÇΩÇÒ",U"Ç”Ç¬Ç§",U"ÇﬁÇ∏Ç©ÇµÇ¢",U"Ç¢Ç¢Ç¶" };
+	int stageNum, stageListBeginNum, selectedStageNum, selectedDiffNum;
 
 public:
 	Select(const InitData& init);
 	void update() override;
 	void draw() const override;
+	int getSelectedStageNum();
+	int getSelectedDiffNum();
 };
