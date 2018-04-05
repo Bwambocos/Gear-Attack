@@ -4,6 +4,7 @@
 #include "Main.h"
 #include "Menu.h"
 #include "Select.h"
+#include "Game.h"
 
 void Main()
 {
@@ -16,6 +17,7 @@ void Main()
 	SceneMgr.setFadeColor(Color(255, 255, 255));
 	SceneMgr.add<Menu>(U"Menu");
 	SceneMgr.add<Select>(U"Select");
+	SceneMgr.add<Game>(U"Game");
 	
 	// メインループ
 	while (System::Update())
