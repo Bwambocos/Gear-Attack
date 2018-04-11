@@ -6,6 +6,14 @@
 const int32 windowWidth = 720;
 const int32 windowHeight = 480;
 
+// 共有データ
+struct GameData
+{
+	int selectedStageNum, selectedDiffNum;
+};
+
+using MyApp = SceneManager<String, GameData>;
+
 template <class ShapeType>
 class HighlightingShape : public ShapeType
 {

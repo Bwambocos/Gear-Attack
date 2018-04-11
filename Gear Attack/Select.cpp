@@ -21,7 +21,8 @@ Select::Select(const InitData& init) :IScene(init)
 	startRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 2, 441), startFont(U"ゲームスタート").region().w + 30, 48);
 	stageNum = 0, stageListBeginNum = 1;
 	while (FileSystem::Exists(U"data/Game/s" + Format(stageNum + 1) + U".txt")) ++stageNum;
-	selectedStageNum = selectedDiffNum = -1;
+	getData().selectedStageNum = -1;
+	getData().selectedDiffNum = -1;
 }
 
 // ステージ選択 更新
@@ -33,7 +34,7 @@ void Select::update()
 		stageRect[i].update();
 		if (stageRect[i].leftClicked())
 		{
-			selectedStageNum = (selectedStageNum == i + stageListBeginNum ? -1 : i + stageListBeginNum);
+			getData().selectedStageNum = (getData().selectedStageNum == i + stageListBeginNum ? -1 : i + stageListBeginNum);
 		}
 	}
 	for (auto i : step(4))
@@ -41,7 +42,7 @@ void Select::update()
 		diffRect[i].update();
 		if (diffRect[i].leftClicked())
 		{
-			selectedDiffNum = (selectedDiffNum == i ? -1 : i);
+			getData().selectedDiffNum = (getData().selectedDiffNum == i ? -1 : i);
 		}
 	}
 	startRect.update();
@@ -63,11 +64,11 @@ void Select::draw() const
 	for (auto i : step(3))
 	{
 		if (i + stageListBeginNum > stageNum) break;
-		stageRect[i].drawHighlight((i + stageListBeginNum == selectedStageNum ? Color(0, 255, 255) : Color(255, 255, 255)));
+		stageRect[i].drawHighlight((i + stageListBeginNum == getData().selectedStageNum ? Color(0, 255, 255) : Color(255, 255, 255)));
 	}
 	for (auto i : step(4))
 	{
-		diffRect[i].drawHighlight((i == selectedDiffNum ? Color(0, 255, 255) : Color(255, 255, 255)));
+		diffRect[i].drawHighlight((i == getData().selectedDiffNum ? Color(0, 255, 255) : Color(255, 255, 255)));
 	}
 	startRect.drawHighlight();
 	if (stageListBeginNum > 1) goUpTrig.drawHighlight();
@@ -85,17 +86,5 @@ void Select::draw() const
 	{
 		diffFont(diffString[i]).drawAt(diffRect[i].center(), Color(32, 32, 32));
 	}
-	startFont(U"ゲームスタート").drawAt(Window::Width() / 2, 441, (selectedStageNum != -1 && selectedDiffNum != -1 ? Color(255, 64, 64) : Palette::Gray));
-}
-
-// 選択されたステージの番号を取得する
-int Select::getSelectedStageNum()
-{
-	return selectedStageNum;
-}
-
-// 選択された難易度の番号を取得する
-int Select::getSelectedDiffNum()
-{
-	return selectedDiffNum;
+	startFont(U"ゲームスタート").drawAt(Window::Width() / 2, 441, (getData().selectedStageNum != -1 && getData().selectedDiffNum != -1 ? Color(255, 64, 64) : Palette::Gray));
 }

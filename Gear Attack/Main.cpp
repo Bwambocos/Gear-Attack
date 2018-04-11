@@ -12,11 +12,11 @@ void Main()
 	Graphics::SetBackground(Palette::Seagreen);
 
 	// 使用するシーン
-	SceneManager<String> SceneMgr;
+	MyApp SceneMgr;
 	SceneMgr.setFadeColor(Color(255, 255, 255));
 	SceneMgr.add<Menu>(U"Menu");
 	SceneMgr.add<Select>(U"Select");
-	
+
 	// メインループ
 	while (System::Update())
 	{
