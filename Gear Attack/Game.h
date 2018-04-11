@@ -9,12 +9,11 @@ const int fieldSize = 392;
 const int cellSize = 28;
 
 // ƒQ[ƒ€‰æ–Ê
-class Game :public SceneManager<String>::Scene
+class Game :public MyApp::Scene
 {
 private:
 	Texture gameField;
 	Grid<int>fieldData;
-	int stageNum, diffNum;
 
 public:
 	Game(const InitData& init);
