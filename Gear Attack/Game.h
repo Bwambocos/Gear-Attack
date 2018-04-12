@@ -14,6 +14,8 @@ class Game :public MyApp::Scene
 private:
 	Texture gameField;
 	Grid<int>fieldData;
+	Rect infoRect;
+	Font infoFont;
 
 public:
 	Game(const InitData& init);
