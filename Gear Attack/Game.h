@@ -7,6 +7,7 @@
 // const
 const int fieldSize = 392;
 const int cellSize = 28;
+const int maxHP = 200;
 
 // ÉQÅ[ÉÄâÊñ 
 class Game :public MyApp::Scene
@@ -14,8 +15,9 @@ class Game :public MyApp::Scene
 private:
 	Texture gameField;
 	Grid<int>fieldData;
-	Rect infoRect;
-	Font infoFont;
+	Rect infoRect, lifeRect;
+	Font statsFont;
+	int playerHP;
 
 public:
 	Game(const InitData& init);
