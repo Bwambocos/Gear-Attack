@@ -15,8 +15,9 @@ class Game :public MyApp::Scene
 private:
 	Texture gameField;
 	Grid<int>fieldData;
-	Rect infoRect, lifeRect;
+	Rect infoRect, lifeRect, timeRect;
 	Font statsFont;
+	uint64 nowTime, startTime;
 	int playerHP;
 
 public:
