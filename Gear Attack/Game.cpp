@@ -7,8 +7,20 @@
 // ÉQÅ[ÉÄâÊñ  èâä˙âª
 Game::Game(const InitData& init) :IScene(init)
 {
-	gameField = Texture(U"data/Game/gameField.png");
+	gameFieldImg = Texture(U"data/Game/gameField.png");
+	for (auto i : step(fieldCellKinds)) fieldCellImg[i] = Texture(U"data/Game/cell" + Format(i + 1) + U".png");
 	fieldData = Grid<int>(fieldSize / cellSize, fieldSize / cellSize);
+	fieldReader = TextReader(U"data/Game/s" + Format(getData().selectedStageNum) + U".txt");
+	for (auto x : step(fieldSize / cellSize))
+	{
+		for (auto y : step(fieldSize / cellSize))
+		{
+			char32 tmp;
+			fieldReader.readChar(tmp);
+			fieldData[y][x] = tmp - '0';
+		}
+		fieldReader.readChar();
+	}
 	infoRect = Rect(490, 10, 220, 107);
 	timeRect = Rect(490, 127, 220, 107);
 	lifeRect = Rect(490, 244, 220, 96);
@@ -26,7 +38,14 @@ void Game::update()
 // ÉQÅ[ÉÄâÊñ  ï`âÊ
 void Game::draw() const
 {
-	gameField.draw(0, 0);
+	gameFieldImg.draw(0, 0);
+	for (auto x : step(fieldSize / cellSize))
+	{
+		for (auto y : step(fieldSize / cellSize))
+		{
+			fieldCellImg[fieldData[x][y]].draw(44 + x * cellSize, 44 + y * cellSize);
+		}
+	}
 	infoRect.draw(Color(255, 255, 255, 120));
 	infoRect.drawFrame(2);
 	timeRect.draw(Color(64, 64, 64, 120));
