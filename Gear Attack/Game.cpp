@@ -11,15 +11,19 @@ Game::Game(const InitData& init) :IScene(init)
 	for (auto i : step(fieldCellKinds)) fieldCellImg[i] = Texture(U"data/Game/cell" + Format(i + 1) + U".png");
 	fieldData = Grid<int>(fieldSize / cellSize, fieldSize / cellSize);
 	fieldReader = TextReader(U"data/Game/s" + Format(getData().selectedStageNum) + U".txt");
+	String tmp;
+	fieldReader.readLine(tmp);
+	playerX = Parse<int>(tmp.substr(0, tmp.indexOf(' ')).c_str()) - 1;
+	playerY = Parse<int>(tmp.substr(tmp.indexOf(' ') + 1).c_str()) - 1;
 	for (auto x : step(fieldSize / cellSize))
 	{
+		char32 tmp;
 		for (auto y : step(fieldSize / cellSize))
 		{
-			char32 tmp;
 			fieldReader.readChar(tmp);
 			fieldData[y][x] = tmp - '0';
 		}
-		fieldReader.readChar();
+		fieldReader.readChar(tmp);
 	}
 	playerImg = Texture(U"data/Game/playerImg.png");
 	infoRect = Rect(490, 10, 220, 107);
@@ -28,11 +32,6 @@ Game::Game(const InitData& init) :IScene(init)
 	statsFont = Font(36, Typeface::Bold);
 	mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
 	playerHP = maxHP;
-	do
-	{
-		playerX = Random(fieldSize / cellSize - 1);
-		playerY = Random(fieldSize / cellSize - 1);
-	} while (fieldData[(int)playerX][(int)playerY] != 0);
 	playerMoveFlag = false;
 	playerXMoveDistance = playerYMoveDistance = 0;
 }
