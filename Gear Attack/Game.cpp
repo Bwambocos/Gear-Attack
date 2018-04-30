@@ -34,6 +34,9 @@ Game::Game(const InitData& init) :IScene(init)
 	playerHP = maxHP;
 	playerMoveFlag = false;
 	playerXMoveDistance = playerYMoveDistance = 0;
+	stageNum = getData().selectedStageNum;
+	diffNum = getData().selectedDiffNum;
+	Game::initEnemys();
 }
 
 // ƒQ[ƒ€‰æ–Ê XV
@@ -103,6 +106,7 @@ void Game::update()
 			}
 		}
 	}
+	Game::updateEnemys();
 }
 
 // ƒQ[ƒ€‰æ–Ê •`‰æ
@@ -117,14 +121,15 @@ void Game::draw() const
 		}
 	}
 	playerImg.draw(44 + cellSize * playerX + playerXMoveDistance, 44 + cellSize * playerY + playerYMoveDistance);
+	Game::drawEnemys();
 	infoRect.draw(Color(255, 255, 255, 120));
 	infoRect.drawFrame(2);
 	timeRect.draw(Color(64, 64, 64, 120));
 	timeRect.drawFrame(2, Color(16, 16, 16));
 	lifeRect.draw(Color(255, 132, 143, 120));
 	lifeRect.drawFrame(2, Color(255, 132, 143));
-	statsFont(U"ƒXƒe[ƒW" + Format(getData().selectedStageNum)).draw(495, 15, Palette::Black);
-	switch (getData().selectedDiffNum)
+	statsFont(U"ƒXƒe[ƒW" + Format(stageNum)).draw(495, 15, Palette::Black);
+	switch (diffNum)
 	{
 	case 0:
 		statsFont(U"‚©‚ñ‚½‚ñ").draw(495, 66, Palette::Yellowgreen);
@@ -144,4 +149,82 @@ void Game::draw() const
 	statsFont(U"Žc‚è‘Ì—Í").draw(495, 249, Palette::Hotpink);
 	RoundRect(495, 300, 210, 35, 2).draw(Palette::Black);
 	RoundRect(495, 300, 210 * playerHP / maxHP, 35, 2).draw((playerHP >= 100 ? Palette::Lightgreen : (playerHP >= 50 ? Palette::Yellow : Palette::Red)));
+}
+
+// “G ‰Šú‰»
+void Game::initEnemys()
+{
+	enemyImg = Texture(U"data/Game/enemyImg.png");
+	enemys[0].px = fieldSize / cellSize / 2;
+	enemys[0].py = 0;
+	enemys[1].px = 0;
+	enemys[1].py = fieldSize / cellSize / 2;
+	enemys[0].moveDistanceX = enemys[0].moveDistanceY = 0;
+	enemys[1].moveDistanceX = enemys[1].moveDistanceY = 0;
+	enemys[0].moveTime.nowTime = enemys[0].moveTime.startTime = Time::GetMillisec();
+	enemys[0].stayTime.nowTime = enemys[0].stayTime.startTime = Time::GetMillisec();
+	enemys[1].moveTime.nowTime = enemys[1].moveTime.startTime = Time::GetMillisec();
+	enemys[1].stayTime.nowTime = enemys[1].stayTime.startTime = Time::GetMillisec();
+	enemys[0].moveFlag = enemys[1].moveFlag = -1;
+}
+
+// “G XV
+void Game::updateEnemys()
+{
+	for (auto i : step(2))
+	{
+		if (enemys[i].moveFlag == -1)
+		{
+			enemys[i].stayTime.nowTime = Time::GetMillisec();
+			if (enemys[i].stayTime.nowTime - enemys[i].stayTime.startTime >= enemyStayMilliSec[diffNum])
+			{
+				enemys[i].tox = playerX;
+				enemys[i].toy = playerY;
+				if (i == 0) enemys[0].moveFlag = (enemys[0].px < enemys[0].tox ? 4 : 3);
+				else enemys[1].moveFlag = (enemys[1].py < enemys[1].toy ? 2 : 1);
+				enemys[i].moveTime.nowTime = enemys[i].moveTime.startTime = Time::GetMillisec();
+			}
+		}
+		else
+		{
+			enemys[i].moveTime.nowTime = Time::GetMillisec();
+			if ((i == 0 && enemys[i].moveTime.nowTime - enemys[i].moveTime.startTime >= abs(enemys[i].tox - enemys[i].px)*enemyMoveMilliSec[diffNum])
+				|| (i == 1 && enemys[i].moveTime.nowTime - enemys[i].moveTime.startTime >= abs(enemys[i].toy - enemys[i].py)*enemyMoveMilliSec[diffNum]))
+			{
+				enemys[i].px = enemys[i].tox;
+				enemys[i].py = enemys[i].toy;
+				enemys[i].moveFlag = -1;
+				enemys[i].moveDistanceX = enemys[i].moveDistanceY = 0;
+				enemys[i].stayTime.nowTime = enemys[i].stayTime.startTime = Time::GetMillisec();
+			}
+			else
+			{
+				auto dis = (double)cellSize*(enemys[i].moveTime.nowTime - enemys[i].moveTime.startTime) / enemyMoveMilliSec[diffNum];
+				switch (enemys[i].moveFlag)
+				{
+				case 1:
+					enemys[i].moveDistanceY = -dis;
+					break;
+				case 2:
+					enemys[i].moveDistanceY = dis;
+					break;
+				case 3:
+					enemys[i].moveDistanceX = -dis;
+					break;
+				case 4:
+					enemys[i].moveDistanceX = dis;
+					break;
+				}
+			}
+		}
+	}
+}
+
+// “G •`‰æ
+void Game::drawEnemys() const
+{
+	enemyImg.draw(44 + enemys[0].px*cellSize + enemys[0].moveDistanceX, 10);
+	enemyImg.draw(44 + enemys[0].px*cellSize + enemys[0].moveDistanceX, gameFieldImg.width() - 44);
+	enemyImg.draw(10, 44 + enemys[1].py*cellSize + enemys[1].moveDistanceY);
+	enemyImg.draw(gameFieldImg.height() - 44, 44 + enemys[1].py*cellSize + enemys[1].moveDistanceY);
 }
