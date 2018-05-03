@@ -20,6 +20,7 @@ struct doubleTime
 };
 struct enemyData
 {
+	Line attackLine;
 	double moveDistanceX, moveDistanceY;
 	int px, py, tox, toy, moveFlag;
 	doubleTime stayTime, moveTime;

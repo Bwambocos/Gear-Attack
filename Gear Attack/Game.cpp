@@ -176,7 +176,8 @@ void Game::updateEnemys()
 		if (enemys[i].moveFlag == -1)
 		{
 			enemys[i].stayTime.nowTime = Time::GetMillisec();
-			if (enemys[i].stayTime.nowTime - enemys[i].stayTime.startTime >= enemyStayMilliSec[diffNum])
+			if (enemys[i].stayTime.nowTime - enemys[i].stayTime.startTime >= enemyStayMilliSec[diffNum]
+				&& ((i == 0 && enemys[i].px != playerX) || (i == 1 && enemys[i].py != playerY)))
 			{
 				enemys[i].tox = playerX;
 				enemys[i].toy = playerY;
@@ -196,6 +197,8 @@ void Game::updateEnemys()
 				enemys[i].moveFlag = -1;
 				enemys[i].moveDistanceX = enemys[i].moveDistanceY = 0;
 				enemys[i].stayTime.nowTime = enemys[i].stayTime.startTime = Time::GetMillisec();
+				enemys[0].attackLine = Line(44 + enemys[0].px*cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., 10 + enemyImg.height() / 2., 44 + enemys[0].px*cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., gameFieldImg.width() - 44 + enemyImg.height() / 2.);
+				enemys[1].attackLine = Line(10 + enemyImg.width() / 2., 44 + enemys[1].py*cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2., gameFieldImg.height() - 44 + enemyImg.width() / 2., 44 + enemys[1].py*cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2.);
 			}
 			else
 			{
@@ -223,6 +226,16 @@ void Game::updateEnemys()
 // “G •`‰æ
 void Game::drawEnemys() const
 {
+	if (enemys[0].moveFlag == -1)
+	{
+		enemys[0].attackLine.draw(8, Palette::Orange);
+		enemys[0].attackLine.draw(5, Palette::Orangered);
+	}
+	if (enemys[1].moveFlag == -1)
+	{
+		enemys[1].attackLine.draw(8, Palette::Orange);
+		enemys[1].attackLine.draw(5, Palette::Orangered);
+	}
 	enemyImg.draw(44 + enemys[0].px*cellSize + enemys[0].moveDistanceX, 10);
 	enemyImg.draw(44 + enemys[0].px*cellSize + enemys[0].moveDistanceX, gameFieldImg.width() - 44);
 	enemyImg.draw(10, 44 + enemys[1].py*cellSize + enemys[1].moveDistanceY);
