@@ -7,11 +7,13 @@
 // const
 const int fieldSize = 392;
 const int cellSize = 28;
-const int maxHP = 200;
+const int maxHP = 1000;
 const int fieldCellKinds = 3;
 const uint64 playerMoveMilliSec = 100;
 const uint64 enemyStayMilliSec[4] = { 1000,750,500,300 };
 const uint64 enemyMoveMilliSec[4] = { 500,450,400,300 };
+const uint64 gettingPlayerHP[4] = { 333,250,200,100 };
+const uint64 attackingEnemyHP[4] = { 80,160,240,400 };
 
 // ç\ë¢ëÃ
 struct doubleTime
@@ -37,6 +39,7 @@ private:
 	Font statsFont;
 	doubleTime mainTime, playerTime;
 	enemyData enemys[2];
+	uint64 score;
 	int stageNum, diffNum, playerHP, playerMoveFlag;
 	double playerX, playerY, playerXMoveDistance, playerYMoveDistance;
 

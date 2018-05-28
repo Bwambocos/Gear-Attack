@@ -36,6 +36,7 @@ Game::Game(const InitData& init) :IScene(init)
 	playerXMoveDistance = playerYMoveDistance = 0;
 	stageNum = getData().selectedStageNum;
 	diffNum = getData().selectedDiffNum;
+	getData().gameScore = score = 0;
 	Game::initEnemys();
 }
 
@@ -85,6 +86,12 @@ void Game::update()
 			}
 			playerMoveFlag = -1;
 			playerXMoveDistance = playerYMoveDistance = 0;
+			if (fieldData[(int)playerX][(int)playerY] == 2)
+			{
+				playerHP += gettingPlayerHP[diffNum];
+				playerHP = Min(playerHP, maxHP);
+				fieldData[(int)playerX][(int)playerY] = 0;
+			}
 		}
 		else
 		{
@@ -105,6 +112,11 @@ void Game::update()
 				break;
 			}
 		}
+	}
+	if (enemys[0].px == (int)playerX || enemys[1].py == (int)playerY)
+	{
+		playerHP -= attackingEnemyHP[diffNum] / 60;
+		playerHP = Max(playerHP, 0);
 	}
 	Game::updateEnemys();
 }
@@ -148,7 +160,7 @@ void Game::draw() const
 	statsFont(Format((mainTime.nowTime - mainTime.startTime) / 1000.)).draw(495, 183, Color(200, 200, 200));
 	statsFont(U"c‚è‘Ì—Í").draw(495, 249, Palette::Hotpink);
 	RoundRect(495, 300, 210, 35, 2).draw(Palette::Black);
-	RoundRect(495, 300, 210 * playerHP / maxHP, 35, 2).draw((playerHP >= 100 ? Palette::Lightgreen : (playerHP >= 50 ? Palette::Yellow : Palette::Red)));
+	RoundRect(495, 300, 210 * playerHP / maxHP, 35, 2).draw((playerHP >= maxHP / 2 ? Palette::Lightgreen : (playerHP >= maxHP / 4 ? Palette::Yellow : Palette::Red)));
 }
 
 // “G ‰Šú‰»

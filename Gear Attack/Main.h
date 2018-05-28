@@ -10,6 +10,7 @@ const int32 windowHeight = 480;
 struct GameData
 {
 	int selectedStageNum, selectedDiffNum;
+	uint64 gameScore;
 };
 
 using MyApp = SceneManager<String, GameData>;
