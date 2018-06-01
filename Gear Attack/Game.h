@@ -9,6 +9,7 @@ const int fieldSize = 392;
 const int cellSize = 28;
 const int maxHP = 1000;
 const int fieldCellKinds = 3;
+const uint64 drawInfoMessageMilliSec = 1500;
 const uint64 playerMoveMilliSec = 100;
 const uint64 enemyStayMilliSec[4] = { 1000,750,500,300 };
 const uint64 enemyMoveMilliSec[4] = { 500,450,400,300 };
@@ -36,12 +37,15 @@ private:
 	Grid<int>fieldData;
 	TextReader fieldReader;
 	Rect infoRect, lifeRect, timeRect;
-	Font statsFont;
+	RoundRect infoMessageRect;
+	Font infoMessageFont, statsFont;
 	doubleTime mainTime, playerTime;
 	enemyData enemys[2];
+	String infoMessage;
 	uint64 score;
-	int stageNum, diffNum, playerHP, playerMoveFlag;
+	int stageNum, diffNum, checkPointNum, playerHP, playerMoveFlag;
 	double playerX, playerY, playerXMoveDistance, playerYMoveDistance;
+	bool infoMessageFlag;
 
 public:
 	Game(const InitData& init);

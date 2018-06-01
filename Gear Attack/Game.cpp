@@ -15,6 +15,7 @@ Game::Game(const InitData& init) :IScene(init)
 	fieldReader.readLine(tmp);
 	playerX = Parse<int>(tmp.substr(0, tmp.indexOf(' ')).c_str()) - 1;
 	playerY = Parse<int>(tmp.substr(tmp.indexOf(' ') + 1).c_str()) - 1;
+	checkPointNum = 0;
 	for (auto x : step(fieldSize / cellSize))
 	{
 		char32 tmp;
@@ -22,6 +23,7 @@ Game::Game(const InitData& init) :IScene(init)
 		{
 			fieldReader.readChar(tmp);
 			fieldData[y][x] = tmp - '0';
+			if (fieldData[y][x] == 2) ++checkPointNum;
 		}
 		fieldReader.readChar(tmp);
 	}
@@ -29,7 +31,10 @@ Game::Game(const InitData& init) :IScene(init)
 	infoRect = Rect(490, 10, 220, 107);
 	timeRect = Rect(490, 127, 220, 107);
 	lifeRect = Rect(490, 244, 220, 96);
+	infoMessageRect = RoundRect(25, 25, Window::Width() - 50, Window::Height() - 50, 10);
+	infoMessageFont = Font(72, Typeface::Heavy);
 	statsFont = Font(36, Typeface::Bold);
+	infoMessage = U"ゲームスタート！";
 	mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
 	playerHP = maxHP;
 	playerMoveFlag = false;
@@ -38,87 +43,116 @@ Game::Game(const InitData& init) :IScene(init)
 	diffNum = getData().selectedDiffNum;
 	getData().gameScore = score = 0;
 	Game::initEnemys();
+	infoMessageFlag = true;
 }
 
 // ゲーム画面 更新
 void Game::update()
 {
 	mainTime.nowTime = Time::GetMillisec();
-	if (playerMoveFlag == -1)
+	if (infoMessageFlag)
 	{
-		if (playerY > 0 && (KeyW.pressed() || KeyUp.pressed()))
+		if (mainTime.nowTime - mainTime.startTime >= drawInfoMessageMilliSec)
 		{
-			if (fieldData[(int)playerX][(int)playerY - 1] != 1) playerMoveFlag = 1;
+			infoMessageFlag = false;
+			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
+			if (checkPointNum == 0 || playerHP == 0)
+			{
+				// シーン変更
+			}
 		}
-		if (playerY < fieldSize / cellSize - 1 && (KeyS.pressed() || KeyDown.pressed()))
-		{
-			if (fieldData[(int)playerX][(int)playerY + 1] != 1) playerMoveFlag = 2;
-		}
-		if (playerX > 0 && (KeyA.pressed() || KeyLeft.pressed()))
-		{
-			if (fieldData[(int)playerX - 1][(int)playerY] != 1) playerMoveFlag = 3;
-		}
-		if (playerX < fieldSize / cellSize - 1 && (KeyD.pressed() || KeyRight.pressed()))
-		{
-			if (fieldData[(int)playerX + 1][(int)playerY] != 1) playerMoveFlag = 4;
-		}
-		if (playerMoveFlag != -1) playerTime.nowTime = playerTime.startTime = Time::GetMillisec();
 	}
 	else
 	{
-		playerTime.nowTime = Time::GetMillisec();
-		if (playerTime.nowTime - playerTime.startTime > playerMoveMilliSec)
+		if (playerMoveFlag == -1)
 		{
-			switch (playerMoveFlag)
+			if (playerY > 0 && (KeyW.pressed() || KeyUp.pressed()))
 			{
-			case 1:
-				--playerY;
-				break;
-			case 2:
-				++playerY;
-				break;
-			case 3:
-				--playerX;
-				break;
-			case 4:
-				++playerX;
-				break;
+				if (fieldData[(int)playerX][(int)playerY - 1] != 1) playerMoveFlag = 1;
 			}
-			playerMoveFlag = -1;
-			playerXMoveDistance = playerYMoveDistance = 0;
-			if (fieldData[(int)playerX][(int)playerY] == 2)
+			if (playerY < fieldSize / cellSize - 1 && (KeyS.pressed() || KeyDown.pressed()))
 			{
-				playerHP += gettingPlayerHP[diffNum];
-				playerHP = Min(playerHP, maxHP);
-				fieldData[(int)playerX][(int)playerY] = 0;
+				if (fieldData[(int)playerX][(int)playerY + 1] != 1) playerMoveFlag = 2;
 			}
+			if (playerX > 0 && (KeyA.pressed() || KeyLeft.pressed()))
+			{
+				if (fieldData[(int)playerX - 1][(int)playerY] != 1) playerMoveFlag = 3;
+			}
+			if (playerX < fieldSize / cellSize - 1 && (KeyD.pressed() || KeyRight.pressed()))
+			{
+				if (fieldData[(int)playerX + 1][(int)playerY] != 1) playerMoveFlag = 4;
+			}
+			if (playerMoveFlag != -1) playerTime.nowTime = playerTime.startTime = Time::GetMillisec();
 		}
 		else
 		{
-			auto dis = (double)cellSize*(playerTime.nowTime - playerTime.startTime) / playerMoveMilliSec;
-			switch (playerMoveFlag)
+			playerTime.nowTime = Time::GetMillisec();
+			if (playerTime.nowTime - playerTime.startTime > playerMoveMilliSec)
 			{
-			case 1:
-				playerYMoveDistance = -dis;
-				break;
-			case 2:
-				playerYMoveDistance = dis;
-				break;
-			case 3:
-				playerXMoveDistance = -dis;
-				break;
-			case 4:
-				playerXMoveDistance = dis;
-				break;
+				switch (playerMoveFlag)
+				{
+				case 1:
+					--playerY;
+					break;
+				case 2:
+					++playerY;
+					break;
+				case 3:
+					--playerX;
+					break;
+				case 4:
+					++playerX;
+					break;
+				}
+				playerMoveFlag = -1;
+				playerXMoveDistance = playerYMoveDistance = 0;
+				if (fieldData[(int)playerX][(int)playerY] == 2)
+				{
+					playerHP += gettingPlayerHP[diffNum];
+					playerHP = Min(playerHP, maxHP);
+					fieldData[(int)playerX][(int)playerY] = 0;
+					--checkPointNum;
+				}
+			}
+			else
+			{
+				auto dis = (double)cellSize*(playerTime.nowTime - playerTime.startTime) / playerMoveMilliSec;
+				switch (playerMoveFlag)
+				{
+				case 1:
+					playerYMoveDistance = -dis;
+					break;
+				case 2:
+					playerYMoveDistance = dis;
+					break;
+				case 3:
+					playerXMoveDistance = -dis;
+					break;
+				case 4:
+					playerXMoveDistance = dis;
+					break;
+				}
 			}
 		}
+		if (enemys[0].px == (int)playerX || enemys[1].py == (int)playerY)
+		{
+			playerHP -= attackingEnemyHP[diffNum] / 60;
+			playerHP = Max(playerHP, 0);
+		}
+		if (checkPointNum == 0)
+		{
+			infoMessageFlag = true;
+			infoMessage = U"ステージクリア！";
+			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
+		}
+		if (playerHP == 0)
+		{
+			infoMessageFlag = true;
+			infoMessage = U"ゲームオーバー！";
+			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
+		}
+		Game::updateEnemys();
 	}
-	if (enemys[0].px == (int)playerX || enemys[1].py == (int)playerY)
-	{
-		playerHP -= attackingEnemyHP[diffNum] / 60;
-		playerHP = Max(playerHP, 0);
-	}
-	Game::updateEnemys();
 }
 
 // ゲーム画面 描画
@@ -157,10 +191,16 @@ void Game::draw() const
 		break;
 	}
 	statsFont(U"経過時間").draw(495, 132, Color(200, 200, 200));
-	statsFont(Format((mainTime.nowTime - mainTime.startTime) / 1000.)).draw(495, 183, Color(200, 200, 200));
+	statsFont((!infoMessageFlag ? Format((mainTime.nowTime - mainTime.startTime) / 1000.) : U"0.000")).draw(495, 183, Color(200, 200, 200));
 	statsFont(U"残り体力").draw(495, 249, Palette::Hotpink);
 	RoundRect(495, 300, 210, 35, 2).draw(Palette::Black);
 	RoundRect(495, 300, 210 * playerHP / maxHP, 35, 2).draw((playerHP >= maxHP / 2 ? Palette::Lightgreen : (playerHP >= maxHP / 4 ? Palette::Yellow : Palette::Red)));
+	if (infoMessageFlag)
+	{
+		infoMessageRect.draw(Color(255, 255, 255, 120));
+		infoMessageRect.drawFrame(2, 3, (checkPointNum == 0 ? Palette::Yellow : Palette::Darkgray));
+		infoMessageFont(infoMessage).drawAt(infoMessageRect.center(), Color(32, 32, 32));
+	}
 }
 
 // 敵 初期化
