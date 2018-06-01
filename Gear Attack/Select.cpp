@@ -56,6 +56,7 @@ void Select::update()
 		goDownTrig.update();
 		if (goDownTrig.leftClicked() || Mouse::Wheel() < 0) ++stageListBeginNum;
 	}
+	if (getData().selectedStageNum != -1 && getData().selectedDiffNum != -1 && startRect.leftClicked()) changeScene(U"Game");
 }
 
 // ステージ選択 描画
