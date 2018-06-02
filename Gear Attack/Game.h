@@ -9,12 +9,12 @@ const int fieldSize = 392;
 const int cellSize = 28;
 const int maxHP = 1000;
 const int fieldCellKinds = 3;
+const int gettingPlayerHP[4] = { 333,250,200,100 };
+const int attackingEnemyHP[4] = { 80,160,240,400 };
 const uint64 drawInfoMessageMilliSec = 1500;
 const uint64 playerMoveMilliSec = 100;
 const uint64 enemyStayMilliSec[4] = { 1000,750,500,300 };
 const uint64 enemyMoveMilliSec[4] = { 500,450,400,300 };
-const uint64 gettingPlayerHP[4] = { 333,250,200,100 };
-const uint64 attackingEnemyHP[4] = { 80,160,240,400 };
 
 // ç\ë¢ëÃ
 struct doubleTime
@@ -43,7 +43,7 @@ private:
 	enemyData enemys[2];
 	String infoMessage;
 	uint64 score;
-	int stageNum, diffNum, checkPointNum, playerHP, playerMoveFlag;
+	int stageNum, diffNum, checkPointNum, playerMoveFlag, playerHP;
 	double playerX, playerY, playerXMoveDistance, playerYMoveDistance;
 	bool infoMessageFlag;
 
@@ -51,6 +51,9 @@ public:
 	Game(const InitData& init);
 	void update() override;
 	void draw() const override;
+	void initPlayer();
+	void updatePlayer();
+	void drawPlayer() const;
 	void initEnemys();
 	void updateEnemys();
 	void drawEnemys() const;
