@@ -12,12 +12,14 @@ class Ranking :public MyApp::Scene
 {
 private:
 	std::vector<rankData>rankingData;
-	Font titleFont, rankFont;
+	HighlightingShape<Rect>choice1Rect, choice2Rect, choice3Rect, choice4Rect;
+	Font titleFont, choiceFont, rankFont;
 	String diffStr[4] = { U"‚©‚ñ‚½‚ñ",U"‚Ó‚Â‚¤",U"‚Þ‚¸‚©‚µ‚¢",U"‚¢‚¢‚¦" };
-	int diffNum, stageNum;
+	int diffNum, stageNum, rankingBeginNum;
 
 public:
 	Ranking(const InitData& init);
 	void update() override;
 	void draw() const override;
+	void reload(bool newWrite);
 };
