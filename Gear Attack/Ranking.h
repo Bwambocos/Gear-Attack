@@ -13,6 +13,7 @@ class Ranking :public MyApp::Scene
 private:
 	std::vector<rankData>rankingData;
 	HighlightingShape<Rect>choice1Rect, choice2Rect, choice3Rect, choice4Rect;
+	HighlightingShape<Triangle>goUpTrig, goDownTrig;
 	Font titleFont, choiceFont, rankFont;
 	String diffStr[4] = { U"‚©‚ñ‚½‚ñ",U"‚Ó‚Â‚¤",U"‚Þ‚¸‚©‚µ‚¢",U"‚¢‚¢‚¦" };
 	int diffNum, stageNum, rankingBeginNum;
