@@ -52,10 +52,7 @@ void Game::update()
 		{
 			infoMessageFlag = false;
 			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
-			if (checkPointNum == 0 || playerHP == 0)
-			{
-				// ƒV[ƒ“•ÏX
-			}
+			if (checkPointNum == 0 || playerHP == 0) changeScene(U"Ranking");
 		}
 	}
 	else

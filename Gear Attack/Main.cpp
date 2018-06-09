@@ -5,6 +5,7 @@
 #include "Menu.h"
 #include "Select.h"
 #include "Game.h"
+#include "Ranking.h"
 
 void Main()
 {
@@ -18,7 +19,8 @@ void Main()
 	SceneMgr.add<Menu>(U"Menu");
 	SceneMgr.add<Select>(U"Select");
 	SceneMgr.add<Game>(U"Game");
-	
+	SceneMgr.add<Ranking>(U"Ranking");
+
 	// メインループ
 	while (System::Update())
 	{
