@@ -19,6 +19,8 @@ Ranking::Ranking(const InitData& init) :IScene(init)
 	choice4Rect.x = choice3Rect.x + choice3Rect.w + 10; choice4Rect.y = 20 + titleFont.height(); choice4Rect.w = (Window::Width() - 50) / 4; choice4Rect.h = 54;
 	goUpTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10, 25, choice1Rect.y + choice1Rect.h + 25, 10, choice1Rect.y + choice1Rect.h + 25);
 	goDownTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10 + rankFont.height() * 5, 10, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5, 25, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5);
+	goLeftTrig = HighlightingShape<Triangle>(10, 35, 60, 10, 60, 60);
+	goRightTrig = HighlightingShape<Triangle>(Window::Width() - 10, 35, Window::Width() - 60, 60, Window::Width() - 60, 10);
 }
 
 // ランキング 更新
@@ -58,6 +60,22 @@ void Ranking::update()
 		goDownTrig.update();
 		if (goDownTrig.leftClicked() || Mouse::Wheel() < 0) ++rankingBeginNum;
 	}
+	{
+		goLeftTrig.update();
+		if (goLeftTrig.leftClicked())
+		{
+			--stageNum;
+			Ranking::reload(false);
+		}
+	}
+	{
+		goRightTrig.update();
+		if (goRightTrig.leftClicked())
+		{
+			++stageNum;
+			Ranking::reload(false);
+		}
+	}
 }
 
 // ランキング 描画
@@ -74,6 +92,8 @@ void Ranking::draw() const
 	choiceFont(diffStr[3]).drawAt(choice4Rect.center());
 	if (rankingBeginNum >= 1) goUpTrig.drawHighlight(goUpTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
 	if (rankingBeginNum + 5 < rankingData.size()) goDownTrig.drawHighlight(goDownTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
+	goLeftTrig.drawHighlight(goLeftTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
+	goRightTrig.drawHighlight(goRightTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
 	for (auto i : step(Min<int>(5, rankingData.size() - rankingBeginNum)))
 	{
 		rankFont(Format(i + 1 + rankingBeginNum) + U"位 " + rankingData[i + rankingBeginNum].second).draw(35, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i);
