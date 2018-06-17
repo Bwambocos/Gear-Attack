@@ -9,7 +9,6 @@ Ranking::Ranking(const InitData& init) :IScene(init)
 	diffNum = getData().selectedDiffNum;
 	stageNum = getData().selectedStageNum;
 	rankingBeginNum = 0;
-	Ranking::reload(true);
 	titleFont = Font(54, Typeface::Bold);
 	choiceFont = Font(28);
 	rankFont = Font(36);
@@ -21,84 +20,101 @@ Ranking::Ranking(const InitData& init) :IScene(init)
 	goDownTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10 + rankFont.height() * 5, 10, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5, 25, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5);
 	goLeftTrig = HighlightingShape<Triangle>(10, 35, 60, 10, 60, 60);
 	goRightTrig = HighlightingShape<Triangle>(Window::Width() - 10, 35, Window::Width() - 60, 60, Window::Width() - 60, 10);
+	inputNameFlag = true;
+	initInputName();
 }
 
 // ランキング 更新
 void Ranking::update()
 {
-	choice1Rect.update();
-	choice2Rect.update();
-	choice3Rect.update();
-	choice4Rect.update();
-	if (choice1Rect.leftClicked())
+	if (!inputNameFlag)
 	{
-		diffNum = 0;
-		Ranking::reload(false);
-	}
-	if (choice2Rect.leftClicked())
-	{
-		diffNum = 1;
-		Ranking::reload(false);
-	}
-	if (choice3Rect.leftClicked())
-	{
-		diffNum = 2;
-		Ranking::reload(false);
-	}
-	if (choice4Rect.leftClicked())
-	{
-		diffNum = 3;
-		Ranking::reload(false);
-	}
-	if (rankingBeginNum >= 1)
-	{
-		goUpTrig.update();
-		if (goUpTrig.leftClicked() || Mouse::Wheel() > 0) --rankingBeginNum;
-	}
-	if (rankingBeginNum + 5 < rankingData.size())
-	{
-		goDownTrig.update();
-		if (goDownTrig.leftClicked() || Mouse::Wheel() < 0) ++rankingBeginNum;
-	}
-	{
-		goLeftTrig.update();
-		if (goLeftTrig.leftClicked())
+
+		choice1Rect.update();
+		choice2Rect.update();
+		choice3Rect.update();
+		choice4Rect.update();
+		if (choice1Rect.leftClicked())
 		{
-			--stageNum;
+			diffNum = 0;
 			Ranking::reload(false);
 		}
-	}
-	{
-		goRightTrig.update();
-		if (goRightTrig.leftClicked())
+		if (choice2Rect.leftClicked())
 		{
-			++stageNum;
+			diffNum = 1;
 			Ranking::reload(false);
 		}
+		if (choice3Rect.leftClicked())
+		{
+			diffNum = 2;
+			Ranking::reload(false);
+		}
+		if (choice4Rect.leftClicked())
+		{
+			diffNum = 3;
+			Ranking::reload(false);
+		}
+		if (rankingBeginNum >= 1)
+		{
+			goUpTrig.update();
+			if (goUpTrig.leftClicked() || Mouse::Wheel() > 0) --rankingBeginNum;
+		}
+		if (rankingBeginNum + 5 < rankingData.size())
+		{
+			goDownTrig.update();
+			if (goDownTrig.leftClicked() || Mouse::Wheel() < 0) ++rankingBeginNum;
+		}
+		{
+			goLeftTrig.update();
+			if (goLeftTrig.leftClicked())
+			{
+				--stageNum;
+				Ranking::reload(false);
+			}
+		}
+		{
+			goRightTrig.update();
+			if (goRightTrig.leftClicked())
+			{
+				++stageNum;
+				Ranking::reload(false);
+			}
+		}
+	}
+	else
+	{
+		updateInputName();
 	}
 }
 
 // ランキング 描画
 void Ranking::draw() const
 {
-	titleFont(U"ステージ" + Format(stageNum)).drawAt(Window::Width() / 2, 10 + titleFont.height() / 2);
-	choice1Rect.drawHighlight(diffNum == 0 ? Color(0, 255, 255) : Color(255, 255, 255));
-	choice2Rect.drawHighlight(diffNum == 1 ? Color(0, 255, 255) : Color(255, 255, 255));
-	choice3Rect.drawHighlight(diffNum == 2 ? Color(0, 255, 255) : Color(255, 255, 255));
-	choice4Rect.drawHighlight(diffNum == 3 ? Color(0, 255, 255) : Color(255, 255, 255));
-	choiceFont(diffStr[0]).drawAt(choice1Rect.center());
-	choiceFont(diffStr[1]).drawAt(choice2Rect.center());
-	choiceFont(diffStr[2]).drawAt(choice3Rect.center());
-	choiceFont(diffStr[3]).drawAt(choice4Rect.center());
-	if (rankingBeginNum >= 1) goUpTrig.drawHighlight(goUpTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-	if (rankingBeginNum + 5 < rankingData.size()) goDownTrig.drawHighlight(goDownTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-	goLeftTrig.drawHighlight(goLeftTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-	goRightTrig.drawHighlight(goRightTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-	for (auto i : step(Min<int>(5, rankingData.size() - rankingBeginNum)))
+	if (!inputNameFlag)
 	{
-		rankFont(Format(i + 1 + rankingBeginNum) + U"位 " + rankingData[i + rankingBeginNum].second).draw(35, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i);
-		auto scoreWidth = rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").region().w;
-		rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").draw(Window::Width() - 35 - scoreWidth, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i);
+		titleFont(U"ステージ" + Format(stageNum)).drawAt(Window::Width() / 2, 10 + titleFont.height() / 2);
+		choice1Rect.drawHighlight(diffNum == 0 ? Color(0, 255, 255) : Color(255, 255, 255));
+		choice2Rect.drawHighlight(diffNum == 1 ? Color(0, 255, 255) : Color(255, 255, 255));
+		choice3Rect.drawHighlight(diffNum == 2 ? Color(0, 255, 255) : Color(255, 255, 255));
+		choice4Rect.drawHighlight(diffNum == 3 ? Color(0, 255, 255) : Color(255, 255, 255));
+		choiceFont(diffStr[0]).drawAt(choice1Rect.center());
+		choiceFont(diffStr[1]).drawAt(choice2Rect.center());
+		choiceFont(diffStr[2]).drawAt(choice3Rect.center());
+		choiceFont(diffStr[3]).drawAt(choice4Rect.center());
+		if (rankingBeginNum >= 1) goUpTrig.drawHighlight(goUpTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
+		if (rankingBeginNum + 5 < rankingData.size()) goDownTrig.drawHighlight(goDownTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
+		goLeftTrig.drawHighlight(goLeftTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
+		goRightTrig.drawHighlight(goRightTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
+		for (auto i : step(Min<int>(5, rankingData.size() - rankingBeginNum)))
+		{
+			rankFont(Format(i + 1 + rankingBeginNum) + U"位 " + rankingData[i + rankingBeginNum].second).draw(35, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i);
+			auto scoreWidth = rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").region().w;
+			rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").draw(Window::Width() - 35 - scoreWidth, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i);
+		}
+	}
+	else
+	{
+		drawInputName();
 	}
 }
 
@@ -139,4 +155,55 @@ void Ranking::reload(bool newWrite)
 		writer.close();
 	}
 	rankingBeginNum = 0;
+}
+
+// 名前入力 初期化
+void Ranking::initInputName()
+{
+	for (auto i : step(buttonChars.length()))
+	{
+		const auto x = (i % 12) * 50 + 60;
+		const auto y = (i / 12) * 50 + 200;
+		charButtons.emplace_back(String(1, buttonChars[i]), Rect(x, y, 44, 44));
+	}
+	charButtons.emplace_back(U" ", Rect(6 * 50 + 60, 3 * 50 + 200, 144, 44));
+	charButtons.emplace_back(U"[BS]", Rect(9 * 50 + 60, 3 * 50 + 200, 94, 44));
+	getData().playerName = U"";
+	FontAsset::Register(U"nameFont", 42, Typeface::Medium);
+	FontAsset::Register(U"buttonFont", 24, Typeface::Medium);
+}
+
+// 名前入力 更新
+void Ranking::updateInputName()
+{
+	for (auto& button : charButtons)
+	{
+		if (button.update())
+		{
+			if (button.getText() == U"[BS]")
+			{
+				if (!getData().playerName.isEmpty()) getData().playerName.pop_back();
+			}
+			else if (getData().playerName.length() < maxNameLength)
+			{
+				getData().playerName.append(button.getText());
+			}
+			break;
+		}
+	}
+	if (getData().playerName.length() > 0 && KeyEnter.pressed())
+	{
+		inputNameFlag = false;
+		Ranking::reload(true);
+	}
+}
+
+// 名前入力 描画
+void Ranking::drawInputName() const
+{
+	FontAsset(U"nameFont")(U"ランキングにのせる名前を入力").drawAt(Window::Width() / 2, 10 + titleFont.height() / 2);
+	for (const auto& button : charButtons) button.draw();
+	RoundRect(60, 80, 594, 80, 8).draw(Color(240, 250, 255));
+	FontAsset(U"nameFont")(getData().playerName).draw(77, 90, Color(20));
+	FontAsset(U"nameFont")(U"ENTERキーで決定").drawAt(Window::Width() / 2, Window::Height() - 10 - titleFont.height() / 2);
 }
