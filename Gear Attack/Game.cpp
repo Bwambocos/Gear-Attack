@@ -18,16 +18,15 @@ Game::Game(const InitData& init) :IScene(init)
 	checkPointNum = 0;
 	for (auto x : step(fieldSize / cellSize))
 	{
-		char32 tmp;
+		char32 ctmp;
 		for (auto y : step(fieldSize / cellSize))
 		{
-			fieldReader.readChar(tmp);
-			fieldData[y][x] = tmp - '0';
+			fieldReader.readChar(ctmp);
+			fieldData[y][x] = ctmp - '0';
 			if (fieldData[y][x] == 2) ++checkPointNum;
 		}
-		fieldReader.readChar(tmp);
+		fieldReader.readChar(ctmp);
 	}
-	playerImg = Texture(U"data/Game/playerImg.png");
 	infoRect = Rect(490, 10, 220, 107);
 	timeRect = Rect(490, 127, 220, 107);
 	lifeRect = Rect(490, 244, 220, 96);
@@ -36,14 +35,11 @@ Game::Game(const InitData& init) :IScene(init)
 	statsFont = Font(36, Typeface::Bold);
 	infoMessage = U"ゲームスタート！";
 	mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
-	playerHP = maxHP;
-	playerMoveFlag = false;
-	playerXMoveDistance = playerYMoveDistance = 0;
 	stageNum = getData().selectedStageNum;
 	diffNum = getData().selectedDiffNum;
-	getData().gameScore = score = 0;
-	Game::initEnemys();
 	infoMessageFlag = true;
+	Game::initPlayer();
+	Game::initEnemys();
 }
 
 // ゲーム画面 更新
@@ -64,81 +60,6 @@ void Game::update()
 	}
 	else
 	{
-		if (playerMoveFlag == -1)
-		{
-			if (playerY > 0 && (KeyW.pressed() || KeyUp.pressed()))
-			{
-				if (fieldData[(int)playerX][(int)playerY - 1] != 1) playerMoveFlag = 1;
-			}
-			if (playerY < fieldSize / cellSize - 1 && (KeyS.pressed() || KeyDown.pressed()))
-			{
-				if (fieldData[(int)playerX][(int)playerY + 1] != 1) playerMoveFlag = 2;
-			}
-			if (playerX > 0 && (KeyA.pressed() || KeyLeft.pressed()))
-			{
-				if (fieldData[(int)playerX - 1][(int)playerY] != 1) playerMoveFlag = 3;
-			}
-			if (playerX < fieldSize / cellSize - 1 && (KeyD.pressed() || KeyRight.pressed()))
-			{
-				if (fieldData[(int)playerX + 1][(int)playerY] != 1) playerMoveFlag = 4;
-			}
-			if (playerMoveFlag != -1) playerTime.nowTime = playerTime.startTime = Time::GetMillisec();
-		}
-		else
-		{
-			playerTime.nowTime = Time::GetMillisec();
-			if (playerTime.nowTime - playerTime.startTime > playerMoveMilliSec)
-			{
-				switch (playerMoveFlag)
-				{
-				case 1:
-					--playerY;
-					break;
-				case 2:
-					++playerY;
-					break;
-				case 3:
-					--playerX;
-					break;
-				case 4:
-					++playerX;
-					break;
-				}
-				playerMoveFlag = -1;
-				playerXMoveDistance = playerYMoveDistance = 0;
-				if (fieldData[(int)playerX][(int)playerY] == 2)
-				{
-					playerHP += gettingPlayerHP[diffNum];
-					playerHP = Min(playerHP, maxHP);
-					fieldData[(int)playerX][(int)playerY] = 0;
-					--checkPointNum;
-				}
-			}
-			else
-			{
-				auto dis = (double)cellSize*(playerTime.nowTime - playerTime.startTime) / playerMoveMilliSec;
-				switch (playerMoveFlag)
-				{
-				case 1:
-					playerYMoveDistance = -dis;
-					break;
-				case 2:
-					playerYMoveDistance = dis;
-					break;
-				case 3:
-					playerXMoveDistance = -dis;
-					break;
-				case 4:
-					playerXMoveDistance = dis;
-					break;
-				}
-			}
-		}
-		if (enemys[0].px == (int)playerX || enemys[1].py == (int)playerY)
-		{
-			playerHP -= attackingEnemyHP[diffNum] / 60;
-			playerHP = Max(playerHP, 0);
-		}
 		if (checkPointNum == 0)
 		{
 			infoMessageFlag = true;
@@ -151,6 +72,7 @@ void Game::update()
 			infoMessage = U"ゲームオーバー！";
 			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
 		}
+		Game::updatePlayer();
 		Game::updateEnemys();
 	}
 }
@@ -166,8 +88,6 @@ void Game::draw() const
 			fieldCellImg[fieldData[x][y]].draw(44 + x * cellSize, 44 + y * cellSize);
 		}
 	}
-	playerImg.draw(44 + cellSize * playerX + playerXMoveDistance, 44 + cellSize * playerY + playerYMoveDistance);
-	Game::drawEnemys();
 	infoRect.draw(Color(255, 255, 255, 120));
 	infoRect.drawFrame(2);
 	timeRect.draw(Color(64, 64, 64, 120));
@@ -195,12 +115,110 @@ void Game::draw() const
 	statsFont(U"残り体力").draw(495, 249, Palette::Hotpink);
 	RoundRect(495, 300, 210, 35, 2).draw(Palette::Black);
 	RoundRect(495, 300, 210 * playerHP / maxHP, 35, 2).draw((playerHP >= maxHP / 2 ? Palette::Lightgreen : (playerHP >= maxHP / 4 ? Palette::Yellow : Palette::Red)));
+	Game::drawPlayer();
+	Game::drawEnemys();
 	if (infoMessageFlag)
 	{
 		infoMessageRect.draw(Color(255, 255, 255, 120));
 		infoMessageRect.drawFrame(2, 3, (checkPointNum == 0 ? Palette::Yellow : Palette::Darkgray));
 		infoMessageFont(infoMessage).drawAt(infoMessageRect.center(), Color(32, 32, 32));
 	}
+}
+
+// プレーヤー 初期化
+void Game::initPlayer()
+{
+	playerImg = Texture(U"data/Game/playerImg.png");
+	playerHP = maxHP;
+	playerMoveFlag = false;
+	playerXMoveDistance = playerYMoveDistance = 0;
+	getData().gameScore = score = 0;
+}
+
+// プレーヤー 更新
+void Game::updatePlayer()
+{
+	if (playerMoveFlag == -1)
+	{
+		if (playerY > 0 && (KeyW.pressed() || KeyUp.pressed()))
+		{
+			if (fieldData[(int)playerX][(int)playerY - 1] != 1) playerMoveFlag = 1;
+		}
+		if (playerY < fieldSize / cellSize - 1 && (KeyS.pressed() || KeyDown.pressed()))
+		{
+			if (fieldData[(int)playerX][(int)playerY + 1] != 1) playerMoveFlag = 2;
+		}
+		if (playerX > 0 && (KeyA.pressed() || KeyLeft.pressed()))
+		{
+			if (fieldData[(int)playerX - 1][(int)playerY] != 1) playerMoveFlag = 3;
+		}
+		if (playerX < fieldSize / cellSize - 1 && (KeyD.pressed() || KeyRight.pressed()))
+		{
+			if (fieldData[(int)playerX + 1][(int)playerY] != 1) playerMoveFlag = 4;
+		}
+		if (playerMoveFlag != -1) playerTime.nowTime = playerTime.startTime = Time::GetMillisec();
+	}
+	else
+	{
+		playerTime.nowTime = Time::GetMillisec();
+		if (playerTime.nowTime - playerTime.startTime > playerMoveMilliSec)
+		{
+			switch (playerMoveFlag)
+			{
+			case 1:
+				--playerY;
+				break;
+			case 2:
+				++playerY;
+				break;
+			case 3:
+				--playerX;
+				break;
+			case 4:
+				++playerX;
+				break;
+			}
+			playerMoveFlag = -1;
+			playerXMoveDistance = playerYMoveDistance = 0;
+			if (fieldData[(int)playerX][(int)playerY] == 2)
+			{
+				playerHP += gettingPlayerHP[diffNum];
+				playerHP = Min(playerHP, maxHP);
+				fieldData[(int)playerX][(int)playerY] = 0;
+				--checkPointNum;
+			}
+		}
+		else
+		{
+			auto dis = (double)cellSize*(playerTime.nowTime - playerTime.startTime) / playerMoveMilliSec;
+			switch (playerMoveFlag)
+			{
+			case 1:
+				playerYMoveDistance = -dis;
+				break;
+			case 2:
+				playerYMoveDistance = dis;
+				break;
+			case 3:
+				playerXMoveDistance = -dis;
+				break;
+			case 4:
+				playerXMoveDistance = dis;
+				break;
+			}
+		}
+	}
+	if (enemys[0].px == (int)playerX || enemys[1].py == (int)playerY)
+	{
+		playerHP -= attackingEnemyHP[diffNum] / 60;
+		playerHP = Max(playerHP, 0);
+	}
+}
+
+// プレーヤー 描画
+void Game::drawPlayer() const
+{
+	playerImg.draw(44 + cellSize * playerX + playerXMoveDistance, 44 + cellSize * playerY + playerYMoveDistance);
 }
 
 // 敵 初期化
@@ -231,8 +249,8 @@ void Game::updateEnemys()
 			if (enemys[i].stayTime.nowTime - enemys[i].stayTime.startTime >= enemyStayMilliSec[diffNum]
 				&& ((i == 0 && enemys[i].px != playerX) || (i == 1 && enemys[i].py != playerY)))
 			{
-				enemys[i].tox = playerX;
-				enemys[i].toy = playerY;
+				enemys[i].tox = (int)playerX;
+				enemys[i].toy = (int)playerY;
 				if (i == 0) enemys[0].moveFlag = (enemys[0].px < enemys[0].tox ? 4 : 3);
 				else enemys[1].moveFlag = (enemys[1].py < enemys[1].toy ? 2 : 1);
 				enemys[i].moveTime.nowTime = enemys[i].moveTime.startTime = Time::GetMillisec();
