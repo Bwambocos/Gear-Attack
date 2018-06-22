@@ -29,7 +29,6 @@ void Ranking::update()
 {
 	if (!inputNameFlag)
 	{
-
 		choice1Rect.update();
 		choice2Rect.update();
 		choice3Rect.update();
@@ -64,6 +63,7 @@ void Ranking::update()
 			goDownTrig.update();
 			if (goDownTrig.leftClicked() || Mouse::Wheel() < 0) ++rankingBeginNum;
 		}
+		if (stageNum > 1)
 		{
 			goLeftTrig.update();
 			if (goLeftTrig.leftClicked())
@@ -72,6 +72,7 @@ void Ranking::update()
 				Ranking::reload(false);
 			}
 		}
+
 		{
 			goRightTrig.update();
 			if (goRightTrig.leftClicked())
@@ -80,6 +81,7 @@ void Ranking::update()
 				Ranking::reload(false);
 			}
 		}
+		if (KeyM.pressed()) changeScene(U"Menu");
 	}
 	else
 	{
@@ -111,6 +113,7 @@ void Ranking::draw() const
 			auto scoreWidth = rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").region().w;
 			rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").draw(Window::Width() - 35 - scoreWidth, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i);
 		}
+		rankFont(U"Ｍキーでメニューに戻る").drawAt(Window::Width() / 2, Window::Height() - 10 - rankFont.height() / 2);
 	}
 	else
 	{
