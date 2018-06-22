@@ -11,6 +11,7 @@ struct GameData
 {
 	int selectedStageNum, selectedDiffNum;
 	uint64 gameScore;
+	String playerName = U"–¼–³‚µ";
 };
 
 using MyApp = SceneManager<String, GameData>;

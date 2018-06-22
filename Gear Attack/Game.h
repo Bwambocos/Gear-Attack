@@ -15,6 +15,7 @@ const uint64 drawInfoMessageMilliSec = 1500;
 const uint64 playerMoveMilliSec = 100;
 const uint64 enemyStayMilliSec[4] = { 1000,750,500,300 };
 const uint64 enemyMoveMilliSec[4] = { 500,450,400,300 };
+const uint64 calcScoreConst = 1000;
 
 // ç\ë¢ëÃ
 struct doubleTime
