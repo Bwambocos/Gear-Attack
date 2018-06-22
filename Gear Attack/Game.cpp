@@ -40,6 +40,7 @@ Game::Game(const InitData& init) :IScene(init)
 	infoMessageFlag = true;
 	Game::initPlayer();
 	Game::initEnemys();
+	getData().prevScene = U"Game";
 }
 
 // ƒQ[ƒ€‰æ–Ê XV
