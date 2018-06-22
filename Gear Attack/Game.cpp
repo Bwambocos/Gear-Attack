@@ -51,8 +51,12 @@ void Game::update()
 		if (mainTime.nowTime - mainTime.startTime >= drawInfoMessageMilliSec)
 		{
 			infoMessageFlag = false;
+			if (checkPointNum == 0 || playerHP == 0)
+			{
+				getData().gameScore = playerHP * calcScoreConst / ((mainTime.nowTime - mainTime.startTime) / 100);
+				changeScene(U"Ranking");
+			}
 			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
-			if (checkPointNum == 0 || playerHP == 0) changeScene(U"Ranking");
 		}
 	}
 	else
