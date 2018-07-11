@@ -20,7 +20,7 @@ Ranking::Ranking(const InitData& init) :IScene(init)
 	goDownTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10 + rankFont.height() * 5, 10, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5, 25, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5);
 	goLeftTrig = HighlightingShape<Triangle>(10, 35, 60, 10, 60, 60);
 	goRightTrig = HighlightingShape<Triangle>(Window::Width() - 10, 35, Window::Width() - 60, 60, Window::Width() - 60, 10);
-	if (getData().prevScene != U"Menu")
+	if (getData().prevScene == U"Game"&&getData().writeRankingFlag)
 	{
 		inputNameFlag = true;
 		initInputName();
@@ -116,9 +116,9 @@ void Ranking::draw() const
 		if (FileSystem::Exists(U"data/Game/s" + Format(stageNum + 1) + U".txt")) goRightTrig.drawHighlight(goRightTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
 		for (auto i : step(Min<int>(5, (int)rankingData.size() - rankingBeginNum)))
 		{
-			rankFont(Format(i + 1 + rankingBeginNum) + U"位 " + rankingData[i + rankingBeginNum].second).draw(35, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i);
+			rankFont(Format(i + 1 + rankingBeginNum) + U"位 " + rankingData[i + rankingBeginNum].second).draw(35, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i, rankingData[i + rankingBeginNum].second == getData().playerName ? Palette::Orange : Palette::White);
 			auto scoreWidth = rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").region().w;
-			rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").draw(Window::Width() - 35 - scoreWidth, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i);
+			rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").draw(Window::Width() - 35 - scoreWidth, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i, rankingData[i + rankingBeginNum].second == getData().playerName ? Palette::Orange : Palette::White);
 		}
 		rankFont(U"Ｍキーでメニューに戻る").drawAt(Window::Width() / 2, Window::Height() - 10 - rankFont.height() / 2);
 	}
