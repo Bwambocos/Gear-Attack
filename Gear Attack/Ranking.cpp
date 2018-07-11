@@ -68,7 +68,7 @@ void Ranking::update()
 			goUpTrig.update();
 			if (goUpTrig.leftClicked() || Mouse::Wheel() > 0) --rankingBeginNum;
 		}
-		if (rankingBeginNum + 5 < rankingData.size())
+		if (rankingBeginNum + 5 < (signed)rankingData.size())
 		{
 			goDownTrig.update();
 			if (goDownTrig.leftClicked() || Mouse::Wheel() < 0) ++rankingBeginNum;
@@ -111,7 +111,7 @@ void Ranking::draw() const
 		choiceFont(diffStr[2]).drawAt(choice3Rect.center());
 		choiceFont(diffStr[3]).drawAt(choice4Rect.center());
 		if (rankingBeginNum >= 1) goUpTrig.drawHighlight(goUpTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-		if (rankingBeginNum + 5 < rankingData.size()) goDownTrig.drawHighlight(goDownTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
+		if (rankingBeginNum + 5 < (signed)rankingData.size()) goDownTrig.drawHighlight(goDownTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
 		if (stageNum > 1) goLeftTrig.drawHighlight(goLeftTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
 		if (FileSystem::Exists(U"data/Game/s" + Format(stageNum + 1) + U".txt")) goRightTrig.drawHighlight(goRightTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
 		for (auto i : step(Min<int>(5, (int)rankingData.size() - rankingBeginNum)))
@@ -167,11 +167,11 @@ void Ranking::reload(bool newWrite)
 // –¼‘O“ü—Í ‰Šú‰»
 void Ranking::initInputName()
 {
-	for (auto i : step(buttonChars.length()))
+	for (int i = 0; i < (signed)buttonChars.length(); ++i)
 	{
 		const auto x = (i % 12) * 50 + 60;
 		const auto y = (i / 12) * 50 + 200;
-		charButtons.emplace_back(String(1, buttonChars[(int)i]), Rect(x, y, 44, 44));
+		charButtons.emplace_back(String(1, buttonChars[i]), Rect(x, y, 44, 44));
 	}
 	charButtons.emplace_back(U" ", Rect(6 * 50 + 60, 3 * 50 + 200, 144, 44));
 	charButtons.emplace_back(U"[BS]", Rect(9 * 50 + 60, 3 * 50 + 200, 94, 44));
