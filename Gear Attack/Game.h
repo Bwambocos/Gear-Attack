@@ -15,7 +15,7 @@ const uint64 drawInfoMessageMilliSec = 1500;
 const uint64 playerMoveMilliSec = 100;
 const uint64 enemyStayMilliSec[4] = { 1000,750,500,300 };
 const uint64 enemyMoveMilliSec[4] = { 500,450,400,300 };
-const uint64 calcScoreConst = 1000;
+const uint64 calcScoreConst = 10000;
 
 // ç\ë¢ëÃ
 struct doubleTime
@@ -43,7 +43,7 @@ private:
 	doubleTime mainTime, playerTime;
 	enemyData enemys[2];
 	String infoMessage;
-	uint64 score;
+	uint64 score, clearTime;
 	int stageNum, diffNum, checkPointNum, playerMoveFlag, playerHP;
 	double playerX, playerY, playerXMoveDistance, playerYMoveDistance;
 	bool infoMessageFlag;
