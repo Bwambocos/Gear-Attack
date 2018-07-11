@@ -187,13 +187,12 @@ void Ranking::updateInputName()
 			{
 				if (!getData().playerName.isEmpty()) getData().playerName.pop_back();
 			}
-			else if (getData().playerName.length() < maxNameLength)
-			{
-				getData().playerName.append(button.getText());
-			}
+			else if (getData().playerName.length() < maxNameLength) getData().playerName.append(button.getText());
 			break;
 		}
 	}
+	TextInput::UpdateText(getData().playerName);
+	if (getData().playerName.length() > maxNameLength) getData().playerName.erase(getData().playerName.begin() + maxNameLength, getData().playerName.end());
 	if (getData().playerName.length() > 0 && KeyEnter.pressed())
 	{
 		inputNameFlag = false;
