@@ -23,6 +23,7 @@ Select::Select(const InitData& init) :IScene(init)
 	while (FileSystem::Exists(U"data/Game/s" + Format(stageNum + 1) + U".txt")) ++stageNum;
 	getData().selectedStageNum = -1;
 	getData().selectedDiffNum = -1;
+	getData().prevScene = U"Select";
 }
 
 // ステージ選択 更新

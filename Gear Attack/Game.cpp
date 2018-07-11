@@ -40,6 +40,7 @@ Game::Game(const InitData& init) :IScene(init)
 	infoMessageFlag = true;
 	Game::initPlayer();
 	Game::initEnemys();
+	getData().prevScene = U"Game";
 }
 
 // ゲーム画面 更新
@@ -53,7 +54,7 @@ void Game::update()
 			infoMessageFlag = false;
 			if (checkPointNum == 0 || playerHP == 0)
 			{
-				getData().gameScore = playerHP * calcScoreConst / ((mainTime.nowTime - mainTime.startTime) / 100);
+				getData().gameScore = playerHP * calcScoreConst / (clearTime / 100);
 				changeScene(U"Ranking");
 			}
 			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
@@ -65,6 +66,7 @@ void Game::update()
 		{
 			infoMessageFlag = true;
 			infoMessage = U"ステージクリア！";
+			clearTime = mainTime.nowTime-mainTime.startTime;
 			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
 		}
 		if (playerHP == 0)

@@ -20,8 +20,18 @@ Ranking::Ranking(const InitData& init) :IScene(init)
 	goDownTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10 + rankFont.height() * 5, 10, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5, 25, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5);
 	goLeftTrig = HighlightingShape<Triangle>(10, 35, 60, 10, 60, 60);
 	goRightTrig = HighlightingShape<Triangle>(Window::Width() - 10, 35, Window::Width() - 60, 60, Window::Width() - 60, 10);
-	inputNameFlag = true;
-	initInputName();
+	if (getData().prevScene != U"Menu")
+	{
+		inputNameFlag = true;
+		initInputName();
+	}
+	else
+	{
+		inputNameFlag = false;
+		stageNum = 1;
+		diffNum = 0;
+	}
+	getData().prevScene = U"Ranking";
 }
 
 // ランキング 更新
@@ -72,7 +82,7 @@ void Ranking::update()
 				Ranking::reload(false);
 			}
 		}
-
+		if (FileSystem::Exists(U"data/Game/s" + Format(stageNum + 1) + U".txt"))
 		{
 			goRightTrig.update();
 			if (goRightTrig.leftClicked())
@@ -83,10 +93,7 @@ void Ranking::update()
 		}
 		if (KeyM.pressed()) changeScene(U"Menu");
 	}
-	else
-	{
-		updateInputName();
-	}
+	else updateInputName();
 }
 
 // ランキング 描画
@@ -105,9 +112,9 @@ void Ranking::draw() const
 		choiceFont(diffStr[3]).drawAt(choice4Rect.center());
 		if (rankingBeginNum >= 1) goUpTrig.drawHighlight(goUpTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
 		if (rankingBeginNum + 5 < rankingData.size()) goDownTrig.drawHighlight(goDownTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-		goLeftTrig.drawHighlight(goLeftTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-		goRightTrig.drawHighlight(goRightTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-		for (auto i : step(Min<int>(5, rankingData.size() - rankingBeginNum)))
+		if (stageNum > 1) goLeftTrig.drawHighlight(goLeftTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
+		if (FileSystem::Exists(U"data/Game/s" + Format(stageNum + 1) + U".txt")) goRightTrig.drawHighlight(goRightTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
+		for (auto i : step(Min<int>(5, (int)rankingData.size() - rankingBeginNum)))
 		{
 			rankFont(Format(i + 1 + rankingBeginNum) + U"位 " + rankingData[i + rankingBeginNum].second).draw(35, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i);
 			auto scoreWidth = rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").region().w;
@@ -115,10 +122,7 @@ void Ranking::draw() const
 		}
 		rankFont(U"Ｍキーでメニューに戻る").drawAt(Window::Width() / 2, Window::Height() - 10 - rankFont.height() / 2);
 	}
-	else
-	{
-		drawInputName();
-	}
+	else drawInputName();
 }
 
 // ランキング リロード
@@ -137,7 +141,7 @@ void Ranking::reload(bool newWrite)
 			if (fileLine[i] == U',')
 			{
 				arr.push_back(fileLine.substr(begin, i - begin));
-				begin = i + 1;
+				begin = (int)i + 1;
 			}
 			if (fileLine[i] == U'\n') break;
 		}
@@ -167,7 +171,7 @@ void Ranking::initInputName()
 	{
 		const auto x = (i % 12) * 50 + 60;
 		const auto y = (i / 12) * 50 + 200;
-		charButtons.emplace_back(String(1, buttonChars[i]), Rect(x, y, 44, 44));
+		charButtons.emplace_back(String(1, buttonChars[(int)i]), Rect(x, y, 44, 44));
 	}
 	charButtons.emplace_back(U" ", Rect(6 * 50 + 60, 3 * 50 + 200, 144, 44));
 	charButtons.emplace_back(U"[BS]", Rect(9 * 50 + 60, 3 * 50 + 200, 94, 44));
