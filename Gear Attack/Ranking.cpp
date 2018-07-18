@@ -16,6 +16,8 @@ Ranking::Ranking(const InitData& init) :IScene(init)
 	choice2Rect.x = choice1Rect.x + choice1Rect.w + 10; choice2Rect.y = 20 + titleFont.height(); choice2Rect.w = (Window::Width() - 50) / 4; choice2Rect.h = 54;
 	choice3Rect.x = choice2Rect.x + choice2Rect.w + 10; choice3Rect.y = 20 + titleFont.height(); choice3Rect.w = (Window::Width() - 50) / 4; choice3Rect.h = 54;
 	choice4Rect.x = choice3Rect.x + choice3Rect.w + 10; choice4Rect.y = 20 + titleFont.height(); choice4Rect.w = (Window::Width() - 50) / 4; choice4Rect.h = 54;
+	goMenuRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4, Window::Height() - 10 - choiceFont.height() / 2), choiceFont(U"メニューへ戻る").region().w + 30, 36);
+	goSelectRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4 * 3, Window::Height() - 10 - choiceFont.height() / 2), choiceFont(U"ゲームへ戻る").region().w + 30, 36);
 	goUpTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10, 25, choice1Rect.y + choice1Rect.h + 25, 10, choice1Rect.y + choice1Rect.h + 25);
 	goDownTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10 + rankFont.height() * 5, 10, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5, 25, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5);
 	goLeftTrig = HighlightingShape<Triangle>(10, 35, 60, 10, 60, 60);
@@ -43,6 +45,8 @@ void Ranking::update()
 		choice2Rect.update();
 		choice3Rect.update();
 		choice4Rect.update();
+		goMenuRect.update();
+		goSelectRect.update();
 		if (choice1Rect.leftClicked())
 		{
 			diffNum = 0;
@@ -63,6 +67,8 @@ void Ranking::update()
 			diffNum = 3;
 			Ranking::reload(false);
 		}
+		if (goMenuRect.leftClicked()) changeScene(U"Menu");
+		if (goSelectRect.leftClicked()) changeScene(U"Select");
 		if (rankingBeginNum >= 1)
 		{
 			goUpTrig.update();
@@ -106,10 +112,14 @@ void Ranking::draw() const
 		choice2Rect.drawHighlight(diffNum == 1 ? Color(0, 255, 255) : Color(255, 255, 255));
 		choice3Rect.drawHighlight(diffNum == 2 ? Color(0, 255, 255) : Color(255, 255, 255));
 		choice4Rect.drawHighlight(diffNum == 3 ? Color(0, 255, 255) : Color(255, 255, 255));
+		goMenuRect.drawHighlight(goMenuRect.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
+		goSelectRect.drawHighlight(goSelectRect.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
 		choiceFont(diffStr[0]).drawAt(choice1Rect.center());
 		choiceFont(diffStr[1]).drawAt(choice2Rect.center());
 		choiceFont(diffStr[2]).drawAt(choice3Rect.center());
 		choiceFont(diffStr[3]).drawAt(choice4Rect.center());
+		choiceFont(U"メニューへ戻る").drawAt(Window::Width() / 4, Window::Height() - 10 - choiceFont.height() / 2);
+		choiceFont(U"ゲームへ戻る").drawAt(Window::Width() / 4 * 3, Window::Height() - 10 - choiceFont.height() / 2);
 		if (rankingBeginNum >= 1) goUpTrig.drawHighlight(goUpTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
 		if (rankingBeginNum + 5 < (signed)rankingData.size()) goDownTrig.drawHighlight(goDownTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
 		if (stageNum > 1) goLeftTrig.drawHighlight(goLeftTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
@@ -120,7 +130,6 @@ void Ranking::draw() const
 			auto scoreWidth = rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").region().w;
 			rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").draw(Window::Width() - 35 - scoreWidth, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i, rankingData[i + rankingBeginNum].second == getData().playerName ? Palette::Orange : Palette::White);
 		}
-		rankFont(U"Ｍキーでメニューに戻る").drawAt(Window::Width() / 2, Window::Height() - 10 - rankFont.height() / 2);
 	}
 	else drawInputName();
 }
@@ -196,6 +205,10 @@ void Ranking::updateInputName()
 		}
 	}
 	TextInput::UpdateText(getData().playerName);
+	if (getData().playerName.length() > 0)
+	{
+		if (getData().playerName[getData().playerName.length() - 1] == U'\n') getData().playerName.erase(getData().playerName.begin() + getData().playerName.length() - 1);
+	}
 	if (getData().playerName.length() > maxNameLength) getData().playerName.erase(getData().playerName.begin() + maxNameLength, getData().playerName.end());
 	if (getData().playerName.length() > 0 && KeyEnter.pressed())
 	{
