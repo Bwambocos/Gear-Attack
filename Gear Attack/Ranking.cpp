@@ -217,13 +217,11 @@ void Ranking::updateInputName()
 		}
 	}
 	TextInput::UpdateText(getData().playerName);
-	if (getData().playerName.length() > 0)
+	if (getData().playerName.length() > maxNameLength) getData().playerName.erase(getData().playerName.begin() + maxNameLength, getData().playerName.end());
+	if (getData().playerName.length() > 0 && getData().playerName[getData().playerName.length() - 1] == U'\n')
 	{
 		if (getData().playerName[getData().playerName.length() - 1] == U'\n') getData().playerName.erase(getData().playerName.begin() + getData().playerName.length() - 1);
-	}
-	if (getData().playerName.length() > maxNameLength) getData().playerName.erase(getData().playerName.begin() + maxNameLength, getData().playerName.end());
-	if (getData().playerName.length() > 0 && KeyEnter.pressed())
-	{
+		if (getData().playerName.length() == 0) getData().playerName = U"–¼–³‚µ";
 		inputNameFlag = false;
 		Ranking::reload(true);
 	}
