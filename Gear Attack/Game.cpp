@@ -65,7 +65,7 @@ void Game::update()
 		{
 			infoMessageFlag = true;
 			infoMessage = U"ステージクリア！";
-			clearTime = mainTime.nowTime-mainTime.startTime;
+			clearTime = mainTime.nowTime - mainTime.startTime;
 			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
 		}
 		if (playerHP == 0)
@@ -210,7 +210,7 @@ void Game::updatePlayer()
 			}
 		}
 	}
-	if (enemys[0].px == (int)playerX || enemys[1].py == (int)playerY)
+	if ((enemys[0].moveFlag == -1 && enemys[0].px == (int)playerX) || (enemys[1].moveFlag == -1 && enemys[1].py == (int)playerY))
 	{
 		playerHP -= attackingEnemyHP[diffNum] / 60;
 		playerHP = Max(playerHP, 0);
