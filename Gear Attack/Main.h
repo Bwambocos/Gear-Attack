@@ -6,6 +6,17 @@
 const int32 windowWidth = 720;
 const int32 windowHeight = 480;
 
+// 共有データ
+struct GameData
+{
+	int selectedStageNum, selectedDiffNum;
+	bool writeRankingFlag;
+	uint64 gameScore;
+	String playerName = U"名無し", prevScene;
+};
+
+using MyApp = SceneManager<String, GameData>;
+
 template <class ShapeType>
 class HighlightingShape : public ShapeType
 {
@@ -30,7 +41,7 @@ public:
 	void drawHighlight(Color color = Color(255, 255, 255)) const
 	{
 		ShapeType::drawFrame(0, 2, color);
-		ShapeType::draw(Color(color, m_transition.value() * 64));
+		ShapeType::draw(Color(color, (uint32)(m_transition.value() * 64)));
 	}
 
 	const Transition& getTransition() const

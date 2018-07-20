@@ -22,7 +22,7 @@
     <ProjectGuid>{04404731-782d-4acd-a8ff-dc4cc2fe809f}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Gear_Attack</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -77,6 +77,7 @@
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\Debug-x86\Intermediate\</IntDir>
     <TargetName>$(ProjectName)(debug_32-bit)</TargetName>
     <LocalDebuggerWorkingDirectory>$(ProjectDir)App</LocalDebuggerWorkingDirectory>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -86,6 +87,7 @@
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\Debug-x64\Intermediate\</IntDir>
     <TargetName>$(ProjectName)(debug_64-bit)</TargetName>
     <LocalDebuggerWorkingDirectory>$(ProjectDir)App</LocalDebuggerWorkingDirectory>
+    <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -95,6 +97,7 @@
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\Release-x86\Intermediate\</IntDir>
     <TargetName>$(ProjectName)(32-bit)</TargetName>
     <LocalDebuggerWorkingDirectory>$(ProjectDir)App</LocalDebuggerWorkingDirectory>
+    <CodeAnalysisRuleSet>MixedMinimumRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -117,6 +120,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -137,6 +141,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -195,8 +200,10 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Ranking.cpp" />
     <ClCompile Include="Select.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -251,8 +258,10 @@
     <Text Include="App\example\test.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Ranking.h" />
     <ClInclude Include="Select.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

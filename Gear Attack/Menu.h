@@ -5,7 +5,7 @@
 #include "Main.h"
 
 // ƒƒjƒ…[
-class Menu :public SceneManager<String>::Scene
+class Menu :public MyApp::Scene
 {
 private:
 	HighlightingShape<Rect>startRect, rankingRect, tutorialRect, creditRect, exitRect;

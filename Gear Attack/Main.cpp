@@ -4,6 +4,8 @@
 #include "Main.h"
 #include "Menu.h"
 #include "Select.h"
+#include "Game.h"
+#include "Ranking.h"
 
 void Main()
 {
@@ -12,11 +14,13 @@ void Main()
 	Graphics::SetBackground(Palette::Seagreen);
 
 	// 使用するシーン
-	SceneManager<String> SceneMgr;
+	MyApp SceneMgr;
 	SceneMgr.setFadeColor(Color(255, 255, 255));
 	SceneMgr.add<Menu>(U"Menu");
 	SceneMgr.add<Select>(U"Select");
-	
+	SceneMgr.add<Game>(U"Game");
+	SceneMgr.add<Ranking>(U"Ranking");
+
 	// メインループ
 	while (System::Update())
 	{
