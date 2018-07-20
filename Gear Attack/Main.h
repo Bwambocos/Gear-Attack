@@ -9,7 +9,7 @@ const int32 windowHeight = 480;
 // 共有データ
 struct GameData
 {
-	int selectedStageNum, selectedDiffNum;
+	int stageListBeginNum = 1, selectedStageNum, selectedDiffNum;
 	bool writeRankingFlag;
 	uint64 gameScore;
 	String playerName = U"名無し", prevScene;
