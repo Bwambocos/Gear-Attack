@@ -22,10 +22,18 @@ Ranking::Ranking(const InitData& init) :IScene(init)
 	goDownTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10 + rankFont.height() * 5, 10, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5, 25, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5);
 	goLeftTrig = HighlightingShape<Triangle>(10, 35, 60, 10, 60, 60);
 	goRightTrig = HighlightingShape<Triangle>(Window::Width() - 10, 35, Window::Width() - 60, 60, Window::Width() - 60, 10);
-	if (getData().prevScene == U"Game"&&getData().writeRankingFlag)
+	if (getData().prevScene == U"Game" && getData().writeRankingFlag)
 	{
-		inputNameFlag = true;
-		initInputName();
+		if (getData().playerName != U"ñºñ≥Çµ")
+		{
+			inputNameFlag = false;
+			Ranking::reload(true);
+		}
+		else
+		{
+			inputNameFlag = true;
+			initInputName();
+		}
 	}
 	else
 	{
@@ -176,6 +184,11 @@ void Ranking::reload(bool newWrite)
 // ñºëOì¸óÕ èâä˙âª
 void Ranking::initInputName()
 {
+	if (getData().playerName != U"ñºñ≥Çµ")
+	{
+		inputNameFlag = false;
+		Ranking::reload(true);
+	}
 	for (int i = 0; i < (signed)buttonChars.length(); ++i)
 	{
 		const auto x = (i % 12) * 50 + 60;
@@ -184,7 +197,6 @@ void Ranking::initInputName()
 	}
 	charButtons.emplace_back(U" ", Rect(6 * 50 + 60, 3 * 50 + 200, 144, 44));
 	charButtons.emplace_back(U"[BS]", Rect(9 * 50 + 60, 3 * 50 + 200, 94, 44));
-	getData().playerName = U"";
 	FontAsset::Register(U"nameFont", 42, Typeface::Medium);
 	FontAsset::Register(U"buttonFont", 24, Typeface::Medium);
 }
