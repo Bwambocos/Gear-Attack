@@ -14,7 +14,7 @@ private:
 	Line titleLine, startLine, centerLine;
 	Font titleFont, stageFont, diffFont, startFont;
 	const String diffString[4] = { U"‚©‚ñ‚½‚ñ",U"‚Ó‚Â‚¤",U"‚Þ‚¸‚©‚µ‚¢",U"‚¢‚¢‚¦" };
-	int stageNum, stageListBeginNum;
+	int stageNum;
 
 public:
 	Select(const InitData& init);
