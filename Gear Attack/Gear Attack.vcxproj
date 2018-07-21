@@ -204,6 +204,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Ranking.cpp" />
+    <ClCompile Include="Rule.cpp" />
     <ClCompile Include="Select.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -262,6 +263,7 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Ranking.h" />
+    <ClInclude Include="Rule.h" />
     <ClInclude Include="Select.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
