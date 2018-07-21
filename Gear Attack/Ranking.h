@@ -5,7 +5,6 @@
 #include "Main.h"
 
 // const
-const size_t maxNameLength = 20;
 const String buttonChars = U"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?-_";
 
 // èáà ÉfÅ[É^
@@ -54,7 +53,7 @@ private:
 	Font titleFont, choiceFont, rankFont;
 	String diffStr[4] = { U"Ç©ÇÒÇΩÇÒ",U"Ç”Ç¬Ç§",U"ÇﬁÇ∏Ç©ÇµÇ¢",U"Ç¢Ç¢Ç¶" };
 	Array<CharButton> charButtons;
-	int diffNum, stageNum, rankingBeginNum;
+	int diffNum, stageNum, rankingBeginNum, maxNameLength;
 	bool inputNameFlag;
 
 public:

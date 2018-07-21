@@ -199,6 +199,7 @@ void Ranking::initInputName()
 	charButtons.emplace_back(U"[BS]", Rect(9 * 50 + 60, 3 * 50 + 200, 94, 44));
 	FontAsset::Register(U"nameFont", 42, Typeface::Medium);
 	FontAsset::Register(U"buttonFont", 24, Typeface::Medium);
+	maxNameLength = Window::Width() - 70 - rankFont(Format(getData().gameScore) + U"点").region().w - rankFont.height() * 2;
 }
 
 // 名前入力 更新
@@ -217,7 +218,7 @@ void Ranking::updateInputName()
 		}
 	}
 	TextInput::UpdateText(getData().playerName);
-	if (getData().playerName.length() > maxNameLength) getData().playerName.erase(getData().playerName.begin() + maxNameLength, getData().playerName.end());
+	while (rankFont(getData().playerName).region().w > maxNameLength) getData().playerName.erase(getData().playerName.begin() + getData().playerName.length() - 1);
 	if (getData().playerName.length() > 0 && getData().playerName[getData().playerName.length() - 1] == U'\n')
 	{
 		if (getData().playerName[getData().playerName.length() - 1] == U'\n') getData().playerName.erase(getData().playerName.begin() + getData().playerName.length() - 1);
