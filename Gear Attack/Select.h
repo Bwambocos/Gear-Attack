@@ -10,10 +10,9 @@ class Select :public MyApp::Scene
 private:
 	HighlightingShape<Rect> stageRect[3], diffRect[4], startRect;
 	HighlightingShape<Triangle> goUpTrig, goDownTrig;
-	MessageBoxButtons warning;
 	Line titleLine, startLine, centerLine;
 	Font titleFont, stageFont, diffFont, startFont;
-	const String diffString[4] = { U"‚©‚ñ‚½‚ñ",U"‚Ó‚Â‚¤",U"‚Þ‚¸‚©‚µ‚¢",U"‚¢‚¢‚¦" };
+	String diffString[4] = { U"‚©‚ñ‚½‚ñ",U"‚Ó‚Â‚¤",U"‚Þ‚¸‚©‚µ‚¢",U"‚¢‚¢‚¦" };
 	int stageNum;
 
 public:
