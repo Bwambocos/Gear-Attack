@@ -8,6 +8,7 @@
 class Credit :public MyApp::Scene
 {
 private:
+	Texture mainImg;
 
 public:
 	Credit(const InitData& init);
