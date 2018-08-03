@@ -61,7 +61,6 @@ void Game::update()
 			if (playerHP == 0)
 			{
 				getData().writeRankingFlag = false;
-				getData().writeRankingFlag = false;
 				changeScene(U"Ranking");
 			}
 			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
