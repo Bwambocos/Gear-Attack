@@ -12,7 +12,7 @@ Rule::Rule(const InitData& init) :IScene(init)
 // ‘€ìà–¾ XV
 void Rule::update()
 {
-
+	if (KeyG.pressed()) changeScene(U"Select");
 }
 
 // ‘€ìà–¾ •`‰æ
