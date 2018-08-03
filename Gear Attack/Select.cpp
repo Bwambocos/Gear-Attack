@@ -28,6 +28,11 @@ Select::Select(const InitData& init) :IScene(init)
 // ステージ選択 更新
 void Select::update()
 {
+	if (getData().firstPlayFlag)
+	{
+		getData().firstPlayFlag = false;
+		changeScene(U"Rule");
+	}
 	for (auto i : step(3))
 	{
 		if (i + getData().stageListBeginNum > stageNum) break;

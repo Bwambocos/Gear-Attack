@@ -10,7 +10,7 @@ const int32 windowHeight = 480;
 struct GameData
 {
 	int stageListBeginNum = 1, selectedStageNum, selectedDiffNum;
-	bool writeRankingFlag;
+	bool writeRankingFlag, firstPlayFlag = true;
 	uint64 gameScore;
 	String playerName = U"–¼–³‚µ", prevScene;
 };

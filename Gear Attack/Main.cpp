@@ -6,6 +6,7 @@
 #include "Select.h"
 #include "Game.h"
 #include "Ranking.h"
+#include "Rule.h"
 
 void Main()
 {
@@ -20,6 +21,7 @@ void Main()
 	SceneMgr.add<Select>(U"Select");
 	SceneMgr.add<Game>(U"Game");
 	SceneMgr.add<Ranking>(U"Ranking");
+	SceneMgr.add<Rule>(U"Rule");
 
 	// メインループ
 	while (System::Update())
