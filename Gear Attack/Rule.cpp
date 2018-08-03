@@ -7,6 +7,7 @@
 Rule::Rule(const InitData& init) :IScene(init)
 {
 	mainImg = Texture(U"data/Rule/main.png");
+	getData().firstPlayFlag = false;
 }
 
 // ‘€ìà–¾ XV
