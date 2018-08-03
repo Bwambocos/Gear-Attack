@@ -30,6 +30,7 @@ void Menu::update()
 	if (rankingRect.leftClicked()) changeScene(U"Ranking");
 	if (startRect.leftClicked()) changeScene(U"Select");
 	if (tutorialRect.leftClicked()) changeScene(U"Rule");
+	if (creditRect.leftClicked()) changeScene(U"Credit");
 	if (exitRect.leftClicked()) System::Exit();
 }
 
