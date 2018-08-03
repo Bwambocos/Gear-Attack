@@ -4,14 +4,14 @@
 #include <HamFramework.hpp>
 #include "Main.h"
 
-// 操作説明
-class Rule :public MyApp::Scene
+// クレジット
+class Credit :public MyApp::Scene
 {
 private:
 	Texture mainImg;
 
 public:
-	Rule(const InitData& init);
+	Credit(const InitData& init);
 	void update() override;
 	void draw() const override;
 };
