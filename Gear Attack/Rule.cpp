@@ -6,7 +6,7 @@
 // ‘€ìà–¾ ‰Šú‰»
 Rule::Rule(const InitData& init) :IScene(init)
 {
-
+	mainImg = Texture(U"data/Rule/main.png");
 }
 
 // ‘€ìà–¾ XV
@@ -18,5 +18,5 @@ void Rule::update()
 // ‘€ìà–¾ •`‰æ
 void Rule::draw() const
 {
-
+	mainImg.drawAt(Window::Center());
 }

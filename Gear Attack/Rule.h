@@ -8,6 +8,7 @@
 class Rule :public MyApp::Scene
 {
 private:
+	Texture mainImg;
 
 public:
 	Rule(const InitData& init);
