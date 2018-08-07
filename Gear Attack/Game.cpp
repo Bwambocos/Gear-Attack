@@ -40,6 +40,7 @@ Game::Game(const InitData& init) :IScene(init)
 	infoMessageFlag = true;
 	Game::initPlayer();
 	Game::initEnemys();
+	getData().prevScene = U"Game";
 }
 
 // ƒQ[ƒ€‰æ–Ê XV
@@ -51,9 +52,15 @@ void Game::update()
 		if (mainTime.nowTime - mainTime.startTime >= drawInfoMessageMilliSec)
 		{
 			infoMessageFlag = false;
-			if (checkPointNum == 0 || playerHP == 0)
+			if (checkPointNum == 0)
 			{
 				getData().gameScore = playerHP * calcScoreConst / (clearTime / 100);
+				getData().writeRankingFlag = true;
+				changeScene(U"Ranking");
+			}
+			if (playerHP == 0)
+			{
+				getData().writeRankingFlag = false;
 				changeScene(U"Ranking");
 			}
 			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();

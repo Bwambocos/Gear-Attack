@@ -1,0 +1,7 @@
+﻿78740,player1,
+76923,player2,
+70921,player3,
+69874,player4,
+64115,player5,
+63940,player6,
+59839,player7,

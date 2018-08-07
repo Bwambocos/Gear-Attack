@@ -16,6 +16,7 @@ Menu::Menu(const InitData& init) :IScene(init)
 	tutorialThumb = Texture(U"data\\Menu\\tutorialThumb.png");
 	titleFont = Font(64, Typeface::Bold);
 	choiceFont = Font(42, Typeface::Medium);
+	getData().prevScene = U"Menu";
 }
 
 // メニュー 更新
@@ -26,7 +27,10 @@ void Menu::update()
 	tutorialRect.update();
 	creditRect.update();
 	exitRect.update();
+	if (rankingRect.leftClicked()) changeScene(U"Ranking");
 	if (startRect.leftClicked()) changeScene(U"Select");
+	if (tutorialRect.leftClicked()) changeScene(U"Rule");
+	if (creditRect.leftClicked()) changeScene(U"Credit");
 	if (exitRect.leftClicked()) System::Exit();
 }
 

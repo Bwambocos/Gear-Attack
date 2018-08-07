@@ -9,9 +9,10 @@ const int32 windowHeight = 480;
 // 共有データ
 struct GameData
 {
-	int selectedStageNum, selectedDiffNum;
+	int stageListBeginNum = 1, selectedStageNum, selectedDiffNum;
+	bool writeRankingFlag, firstPlayFlag = true;
 	uint64 gameScore;
-	String playerName = U"名無し";
+	String playerName = U"名無し", prevScene;
 };
 
 using MyApp = SceneManager<String, GameData>;
