@@ -35,6 +35,7 @@ class Game :public MyApp::Scene
 {
 private:
 	Texture gameFieldImg, fieldCellImg[fieldCellKinds], playerImg, enemyImg;
+	Audio bgm;
 	Grid<int>fieldData;
 	TextReader fieldReader;
 	Rect infoRect, lifeRect, timeRect;

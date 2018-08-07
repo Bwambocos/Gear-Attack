@@ -7,6 +7,7 @@
 // ゲーム画面 初期化
 Game::Game(const InitData& init) :IScene(init)
 {
+	bgm = Audio(U"data//Game//bgm.mp3");
 	gameFieldImg = Texture(U"data/Game/gameField.png");
 	for (auto i : step(fieldCellKinds)) fieldCellImg[i] = Texture(U"data/Game/cell" + Format(i + 1) + U".png");
 	fieldData = Grid<int>(fieldSize / cellSize, fieldSize / cellSize);
@@ -41,6 +42,8 @@ Game::Game(const InitData& init) :IScene(init)
 	Game::initPlayer();
 	Game::initEnemys();
 	getData().prevScene = U"Game";
+	bgm.setLoop(true);
+	bgm.play();
 }
 
 // ゲーム画面 更新
@@ -54,12 +57,14 @@ void Game::update()
 			infoMessageFlag = false;
 			if (checkPointNum == 0)
 			{
+				bgm.stop();
 				getData().gameScore = playerHP * calcScoreConst / (clearTime / 100);
 				getData().writeRankingFlag = true;
 				changeScene(U"Ranking");
 			}
 			if (playerHP == 0)
 			{
+				bgm.stop();
 				getData().writeRankingFlag = false;
 				changeScene(U"Ranking");
 			}
