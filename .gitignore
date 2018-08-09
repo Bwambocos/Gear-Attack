@@ -262,3 +262,5 @@ __pycache__/
 
 # OpenSiv3D
 Intermediate/
+*.html
+*.exe
