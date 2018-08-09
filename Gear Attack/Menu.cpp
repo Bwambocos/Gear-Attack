@@ -14,6 +14,7 @@ Menu::Menu(const InitData& init) :IScene(init)
 	rankingThumb = Texture(U"data\\Menu\\rankingThumb.png");
 	startThumb = Texture(U"data\\Menu\\startThumb.png");
 	tutorialThumb = Texture(U"data\\Menu\\tutorialThumb.png");
+	selectSound = Audio(U"data//Menu//selectSound.wav");
 	titleFont = Font(64, Typeface::Bold);
 	choiceFont = Font(42, Typeface::Medium);
 	getData().prevScene = U"Menu";
@@ -27,11 +28,31 @@ void Menu::update()
 	tutorialRect.update();
 	creditRect.update();
 	exitRect.update();
-	if (rankingRect.leftClicked()) changeScene(U"Ranking");
-	if (startRect.leftClicked()) changeScene(U"Select");
-	if (tutorialRect.leftClicked()) changeScene(U"Rule");
-	if (creditRect.leftClicked()) changeScene(U"Credit");
-	if (exitRect.leftClicked()) System::Exit();
+	if (rankingRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Ranking");
+	}
+	if (startRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Select");
+	}
+	if (tutorialRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Rule");
+	}
+	if (creditRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Credit");
+	}
+	if (exitRect.leftClicked())
+	{
+		selectSound.play();
+		System::Exit();
+	}
 }
 
 // ÉÅÉjÉÖÅ[ ï`âÊ
