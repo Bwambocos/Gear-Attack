@@ -198,6 +198,7 @@ void Ranking::initInputName()
 	charButtons.emplace_back(U" ", Rect(6 * 50 + 60, 3 * 50 + 200, 144, 44));
 	charButtons.emplace_back(U"[BS]", Rect(9 * 50 + 60, 3 * 50 + 200, 94, 44));
 	FontAsset::Register(U"nameFont", 42, Typeface::Medium);
+	FontAsset::Register(U"infoFont", 32, Typeface::Medium);
 	FontAsset::Register(U"buttonFont", 24, Typeface::Medium);
 	maxNameLength = Window::Width() - 70 - rankFont(Format(getData().gameScore) + U"点").region().w - rankFont.height() * 2;
 }
@@ -205,6 +206,7 @@ void Ranking::initInputName()
 // 名前入力 更新
 void Ranking::updateInputName()
 {
+	if (KeyT.pressed() && KeyControl.pressed()) Twitter::OpenTweetWindow(U"#Gear_Attack v1.0 でステージ " + Format(getData().selectedStageNum) + U" を難易度「" + diffStr[getData().selectedDiffNum] + U"」でプレイし、スコア " + Format(getData().gameScore) + U" 点を獲得しました！");
 	for (auto& button : charButtons)
 	{
 		if (button.update())
@@ -235,5 +237,5 @@ void Ranking::drawInputName() const
 	for (const auto& button : charButtons) button.draw();
 	RoundRect(60, 80, 594, 80, 8).draw(Color(240, 250, 255));
 	FontAsset(U"nameFont")(getData().playerName).draw(77, 90, Color(20));
-	FontAsset(U"nameFont")(U"ENTERキーで決定").drawAt(Window::Width() / 2, Window::Height() - 10 - titleFont.height() / 2);
+	FontAsset(U"infoFont")(U"ENTERで決定 / Ctrl+TでTwitterに共有").drawAt(Window::Width() / 2, Window::Height() - 10 - titleFont.height() / 2);
 }
