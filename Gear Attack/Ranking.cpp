@@ -22,6 +22,7 @@ Ranking::Ranking(const InitData& init) :IScene(init)
 	goDownTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10 + rankFont.height() * 5, 10, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5, 25, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5);
 	goLeftTrig = HighlightingShape<Triangle>(10, 35, 60, 10, 60, 60);
 	goRightTrig = HighlightingShape<Triangle>(Window::Width() - 10, 35, Window::Width() - 60, 60, Window::Width() - 60, 10);
+	selectSound = Audio(U"data//Ranking//selectSound.wav");
 	if (getData().prevScene == U"Game" && getData().writeRankingFlag)
 	{
 		if (getData().playerName != U"–¼–³‚µ")
@@ -57,41 +58,62 @@ void Ranking::update()
 		goSelectRect.update();
 		if (choice1Rect.leftClicked())
 		{
+			selectSound.play();
 			diffNum = 0;
 			Ranking::reload(false);
 		}
 		if (choice2Rect.leftClicked())
 		{
+			selectSound.play();
 			diffNum = 1;
 			Ranking::reload(false);
 		}
 		if (choice3Rect.leftClicked())
 		{
+			selectSound.play();
 			diffNum = 2;
 			Ranking::reload(false);
 		}
 		if (choice4Rect.leftClicked())
 		{
+			selectSound.play();
 			diffNum = 3;
 			Ranking::reload(false);
 		}
-		if (goMenuRect.leftClicked()) changeScene(U"Menu");
-		if (goSelectRect.leftClicked()) changeScene(U"Select");
+		if (goMenuRect.leftClicked())
+		{
+			selectSound.play();
+			changeScene(U"Menu");
+		}
+		if (goSelectRect.leftClicked())
+		{
+			selectSound.play();
+			changeScene(U"Select");
+		}
 		if (rankingBeginNum >= 1)
 		{
 			goUpTrig.update();
-			if (goUpTrig.leftClicked() || Mouse::Wheel() > 0) --rankingBeginNum;
+			if (goUpTrig.leftClicked() || Mouse::Wheel() > 0)
+			{
+				selectSound.play();
+				--rankingBeginNum;
+			}
 		}
 		if (rankingBeginNum + 5 < (signed)rankingData.size())
 		{
 			goDownTrig.update();
-			if (goDownTrig.leftClicked() || Mouse::Wheel() < 0) ++rankingBeginNum;
+			if (goDownTrig.leftClicked() || Mouse::Wheel() < 0)
+			{
+				selectSound.play();
+				++rankingBeginNum;
+			}
 		}
 		if (stageNum > 1)
 		{
 			goLeftTrig.update();
 			if (goLeftTrig.leftClicked())
 			{
+				selectSound.play();
 				--stageNum;
 				Ranking::reload(false);
 			}
@@ -101,6 +123,7 @@ void Ranking::update()
 			goRightTrig.update();
 			if (goRightTrig.leftClicked())
 			{
+				selectSound.play();
 				++stageNum;
 				Ranking::reload(false);
 			}
@@ -211,6 +234,7 @@ void Ranking::updateInputName()
 	{
 		if (button.update())
 		{
+			selectSound.play();
 			if (button.getText() == U"[BS]")
 			{
 				if (!getData().playerName.isEmpty()) getData().playerName.pop_back();
