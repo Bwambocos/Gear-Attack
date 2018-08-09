@@ -10,6 +10,7 @@ class Select :public MyApp::Scene
 private:
 	HighlightingShape<Rect> stageRect[3], diffRect[4], startRect;
 	HighlightingShape<Triangle> goUpTrig, goDownTrig;
+	Audio selectSound;
 	Line titleLine, startLine, centerLine;
 	Font titleFont, stageFont, diffFont, startFont;
 	String diffString[4] = { U"‚©‚ñ‚½‚ñ",U"‚Ó‚Â‚¤",U"‚Þ‚¸‚©‚µ‚¢",U"‚¢‚¢‚¦" };
