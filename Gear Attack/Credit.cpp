@@ -12,6 +12,7 @@ Credit::Credit(const InitData& init) :IScene(init)
 // クレジット 更新
 void Credit::update()
 {
+	if (KeyT.pressed()) Twitter::OpenFollowWindow(U"babcs2035");
 	if (KeyM.pressed()) changeScene(U"Menu");
 }
 
