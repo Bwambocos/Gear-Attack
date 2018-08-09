@@ -213,7 +213,7 @@ void Ranking::updateInputName()
 			{
 				if (!getData().playerName.isEmpty()) getData().playerName.pop_back();
 			}
-			else if (getData().playerName.length() < maxNameLength) getData().playerName.append(button.getText());
+			else if ((signed)getData().playerName.length() < maxNameLength) getData().playerName.append(button.getText());
 			break;
 		}
 	}
