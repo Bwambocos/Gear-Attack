@@ -12,7 +12,7 @@
 void Main()
 {
 	Window::Resize({ windowWidth,windowHeight }, true);
-	Window::SetTitle(U"Gear Attack v1.0");
+	Window::SetTitle(U"Gear Attack " + versionStr);
 	Graphics::SetBackground(Palette::Seagreen);
 
 	// 使用するシーン
