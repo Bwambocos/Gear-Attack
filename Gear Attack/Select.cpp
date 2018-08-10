@@ -10,6 +10,7 @@ Select::Select(const InitData& init) :IScene(init)
 	for (auto i : step(4)) diffRect[i] = HighlightingShape<Rect>(375, 99 + 75 * i, 330, 60);
 	goUpTrig = HighlightingShape<Triangle>(180, 99, 210, 129, 150, 129);
 	goDownTrig = HighlightingShape<Triangle>(150, 357, 210, 357, 180, 387);
+	selectSound = Audio(U"data//Select//selectSound.wav");
 	titleLine = Line(0, 84, Window::Width(), 84);
 	startLine = Line(0, 402, Window::Width(), 402);
 	centerLine = Line(Window::Width() / 2, 84, Window::Width() / 2, 402);
@@ -37,25 +38,45 @@ void Select::update()
 	{
 		if (i + getData().stageListBeginNum > stageNum) break;
 		stageRect[i].update();
-		if (stageRect[i].leftClicked()) getData().selectedStageNum = (getData().selectedStageNum == i + getData().stageListBeginNum ? -1 : i + getData().stageListBeginNum);
+		if (stageRect[i].leftClicked())
+		{
+			selectSound.play();
+			getData().selectedStageNum = (getData().selectedStageNum == i + getData().stageListBeginNum ? -1 : i + getData().stageListBeginNum);
+		}
 	}
 	for (auto i : step(4))
 	{
 		diffRect[i].update();
-		if (diffRect[i].leftClicked()) getData().selectedDiffNum = (getData().selectedDiffNum == i ? -1 : i);
+		if (diffRect[i].leftClicked())
+		{
+			selectSound.play();
+			getData().selectedDiffNum = (getData().selectedDiffNum == i ? -1 : i);
+		}
 	}
 	startRect.update();
 	if (getData().stageListBeginNum > 1)
 	{
 		goUpTrig.update();
-		if (goUpTrig.leftClicked() || Mouse::Wheel() > 0) --getData().stageListBeginNum;
+		if (goUpTrig.leftClicked() || Mouse::Wheel() > 0)
+		{
+			selectSound.play();
+			--getData().stageListBeginNum;
+		}
 	}
 	if (getData().stageListBeginNum + 3 <= stageNum)
 	{
 		goDownTrig.update();
-		if (goDownTrig.leftClicked() || Mouse::Wheel() < 0) ++getData().stageListBeginNum;
+		if (goDownTrig.leftClicked() || Mouse::Wheel() < 0)
+		{
+			selectSound.play();
+			++getData().stageListBeginNum;
+		}
 	}
-	if (getData().selectedStageNum != -1 && getData().selectedDiffNum != -1 && startRect.leftClicked()) changeScene(U"Game");
+	if (getData().selectedStageNum != -1 && getData().selectedDiffNum != -1 && startRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Game");
+	}
 }
 
 // ステージ選択 描画
