@@ -320,15 +320,18 @@ void Game::updateEnemys()
 // “G •`‰æ
 void Game::drawEnemys() const
 {
-	if (enemys[0].moveFlag == -1)
+	if (!infoMessageFlag)
 	{
-		enemys[0].attackLine.draw(8, Palette::Orange);
-		enemys[0].attackLine.draw(5, Palette::Orangered);
-	}
-	if (enemys[1].moveFlag == -1)
-	{
-		enemys[1].attackLine.draw(8, Palette::Orange);
-		enemys[1].attackLine.draw(5, Palette::Orangered);
+		if (enemys[0].moveFlag == -1)
+		{
+			enemys[0].attackLine.draw(8, Palette::Orange);
+			enemys[0].attackLine.draw(5, Palette::Orangered);
+		}
+		if (enemys[1].moveFlag == -1)
+		{
+			enemys[1].attackLine.draw(8, Palette::Orange);
+			enemys[1].attackLine.draw(5, Palette::Orangered);
+		}
 	}
 	enemyImg.draw(44 + enemys[0].px*cellSize + enemys[0].moveDistanceX, 10);
 	enemyImg.draw(44 + enemys[0].px*cellSize + enemys[0].moveDistanceX, gameFieldImg.width() - 44);
