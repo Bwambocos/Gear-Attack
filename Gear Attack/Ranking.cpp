@@ -23,17 +23,17 @@ Ranking::Ranking(const InitData& init) :IScene(init)
 	goLeftTrig = HighlightingShape<Triangle>(10, 35, 60, 10, 60, 60);
 	goRightTrig = HighlightingShape<Triangle>(Window::Width() - 10, 35, Window::Width() - 60, 60, Window::Width() - 60, 10);
 	selectSound = Audio(U"data//Ranking//selectSound.wav");
-	if (getData().prevScene == U"Game" && getData().writeRankingFlag)
+	if (getData().prevScene == U"Game")
 	{
-		if (getData().playerName != U"名無し")
-		{
-			inputNameFlag = false;
-			Ranking::reload(true);
-		}
-		else
+		if (getData().writeRankingFlag)
 		{
 			inputNameFlag = true;
 			initInputName();
+		}
+		else
+		{
+			inputNameFlag = false;
+			Ranking::reload(false);
 		}
 	}
 	else
@@ -207,11 +207,6 @@ void Ranking::reload(bool newWrite)
 // 名前入力 初期化
 void Ranking::initInputName()
 {
-	if (getData().playerName != U"名無し")
-	{
-		inputNameFlag = false;
-		Ranking::reload(true);
-	}
 	for (int i = 0; i < (signed)buttonChars.length(); ++i)
 	{
 		const auto x = (i % 12) * 50 + 60;
@@ -229,7 +224,7 @@ void Ranking::initInputName()
 // 名前入力 更新
 void Ranking::updateInputName()
 {
-	if (KeyT.pressed() && KeyControl.pressed()) Twitter::OpenTweetWindow(U"#Gear_Attack v1.0 でステージ " + Format(getData().selectedStageNum) + U" を難易度「" + diffStr[getData().selectedDiffNum] + U"」でプレイし、スコア " + Format(getData().gameScore) + U" 点を獲得しました！");
+	if (KeyT.pressed() && KeyControl.pressed()) Twitter::OpenTweetWindow(U"#Gear_Attack " + versionStr + U" でステージ " + Format(getData().selectedStageNum) + U" を難易度「" + diffStr[getData().selectedDiffNum] + U"」でプレイし、スコア " + Format(getData().gameScore) + U" 点を獲得しました！");
 	for (auto& button : charButtons)
 	{
 		if (button.update())
