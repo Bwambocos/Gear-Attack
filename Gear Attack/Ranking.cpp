@@ -224,7 +224,7 @@ void Ranking::initInputName()
 // 名前入力 更新
 void Ranking::updateInputName()
 {
-	if (KeyT.pressed() && KeyControl.pressed()) Twitter::OpenTweetWindow(U"#Gear_Attack " + versionStr + U" でステージ " + Format(getData().selectedStageNum) + U" を難易度「" + diffStr[getData().selectedDiffNum] + U"」でプレイし、スコア " + Format(getData().gameScore) + U" 点を獲得しました！");
+	if (KeyT.pressed() && KeyControl.pressed()) Twitter::OpenTweetWindow(U"#Gear_Attack " + versionStr + U" でステージ " + Format(getData().selectedStageNum) + U" を難易度「" + diffStr[getData().selectedDiffNum] + U"」でプレイし、スコア " + Format(getData().gameScore) + U" 点を獲得しました！ ダウンロードはこちら：https://github.com/Bwambocos/Gear-Attack/releases");
 	for (auto& button : charButtons)
 	{
 		if (button.update())
