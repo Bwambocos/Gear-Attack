@@ -49,6 +49,7 @@ Game::Game(const InitData& init) :IScene(init)
 	getData().prevScene = U"Game";
 	bgm.setLoop(true);
 	bgm.play();
+	clearTime = 0;
 }
 
 // ゲーム画面 更新
@@ -132,7 +133,7 @@ void Game::draw() const
 		break;
 	}
 	statsFont(U"経過時間").draw(495, 132, Color(200, 200, 200));
-	statsFont((!infoMessageFlag ? Format((mainTime.nowTime - mainTime.startTime) / 1000.) : U"0.000")).draw(495, 183, Color(200, 200, 200));
+	statsFont((!infoMessageFlag ? Format((mainTime.nowTime - mainTime.startTime) / 1000.) : Format(clearTime / 1000.))).draw(495, 183, Color(200, 200, 200));
 	statsFont(U"残り体力").draw(495, 249, Palette::Hotpink);
 	RoundRect(495, 300, 210, 35, 2).draw(Palette::Black);
 	RoundRect(495, 300, 210 * playerHP / maxHP, 35, 2).draw((playerHP >= maxHP / 2 ? Palette::Lightgreen : (playerHP >= maxHP / 4 ? Palette::Yellow : Palette::Red)));
