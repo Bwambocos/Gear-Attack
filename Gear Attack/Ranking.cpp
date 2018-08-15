@@ -22,17 +22,18 @@ Ranking::Ranking(const InitData& init) :IScene(init)
 	goDownTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10 + rankFont.height() * 5, 10, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5, 25, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5);
 	goLeftTrig = HighlightingShape<Triangle>(10, 35, 60, 10, 60, 60);
 	goRightTrig = HighlightingShape<Triangle>(Window::Width() - 10, 35, Window::Width() - 60, 60, Window::Width() - 60, 10);
-	if (getData().prevScene == U"Game" && getData().writeRankingFlag)
+	selectSound = Audio(U"data//Ranking//selectSound.wav");
+	if (getData().prevScene == U"Game")
 	{
-		if (getData().playerName != U"名無し")
-		{
-			inputNameFlag = false;
-			Ranking::reload(true);
-		}
-		else
+		if (getData().writeRankingFlag)
 		{
 			inputNameFlag = true;
 			initInputName();
+		}
+		else
+		{
+			inputNameFlag = false;
+			Ranking::reload(false);
 		}
 	}
 	else
@@ -57,41 +58,62 @@ void Ranking::update()
 		goSelectRect.update();
 		if (choice1Rect.leftClicked())
 		{
+			selectSound.play();
 			diffNum = 0;
 			Ranking::reload(false);
 		}
 		if (choice2Rect.leftClicked())
 		{
+			selectSound.play();
 			diffNum = 1;
 			Ranking::reload(false);
 		}
 		if (choice3Rect.leftClicked())
 		{
+			selectSound.play();
 			diffNum = 2;
 			Ranking::reload(false);
 		}
 		if (choice4Rect.leftClicked())
 		{
+			selectSound.play();
 			diffNum = 3;
 			Ranking::reload(false);
 		}
-		if (goMenuRect.leftClicked()) changeScene(U"Menu");
-		if (goSelectRect.leftClicked()) changeScene(U"Select");
+		if (goMenuRect.leftClicked())
+		{
+			selectSound.play();
+			changeScene(U"Menu");
+		}
+		if (goSelectRect.leftClicked())
+		{
+			selectSound.play();
+			changeScene(U"Select");
+		}
 		if (rankingBeginNum >= 1)
 		{
 			goUpTrig.update();
-			if (goUpTrig.leftClicked() || Mouse::Wheel() > 0) --rankingBeginNum;
+			if (goUpTrig.leftClicked() || Mouse::Wheel() > 0)
+			{
+				selectSound.play();
+				--rankingBeginNum;
+			}
 		}
 		if (rankingBeginNum + 5 < (signed)rankingData.size())
 		{
 			goDownTrig.update();
-			if (goDownTrig.leftClicked() || Mouse::Wheel() < 0) ++rankingBeginNum;
+			if (goDownTrig.leftClicked() || Mouse::Wheel() < 0)
+			{
+				selectSound.play();
+				++rankingBeginNum;
+			}
 		}
 		if (stageNum > 1)
 		{
 			goLeftTrig.update();
 			if (goLeftTrig.leftClicked())
 			{
+				selectSound.play();
 				--stageNum;
 				Ranking::reload(false);
 			}
@@ -101,6 +123,7 @@ void Ranking::update()
 			goRightTrig.update();
 			if (goRightTrig.leftClicked())
 			{
+				selectSound.play();
 				++stageNum;
 				Ranking::reload(false);
 			}
@@ -184,11 +207,6 @@ void Ranking::reload(bool newWrite)
 // 名前入力 初期化
 void Ranking::initInputName()
 {
-	if (getData().playerName != U"名無し")
-	{
-		inputNameFlag = false;
-		Ranking::reload(true);
-	}
 	for (int i = 0; i < (signed)buttonChars.length(); ++i)
 	{
 		const auto x = (i % 12) * 50 + 60;
@@ -198,6 +216,7 @@ void Ranking::initInputName()
 	charButtons.emplace_back(U" ", Rect(6 * 50 + 60, 3 * 50 + 200, 144, 44));
 	charButtons.emplace_back(U"[BS]", Rect(9 * 50 + 60, 3 * 50 + 200, 94, 44));
 	FontAsset::Register(U"nameFont", 42, Typeface::Medium);
+	FontAsset::Register(U"infoFont", 32, Typeface::Medium);
 	FontAsset::Register(U"buttonFont", 24, Typeface::Medium);
 	maxNameLength = Window::Width() - 70 - rankFont(Format(getData().gameScore) + U"点").region().w - rankFont.height() * 2;
 }
@@ -205,10 +224,12 @@ void Ranking::initInputName()
 // 名前入力 更新
 void Ranking::updateInputName()
 {
+	if (KeyT.pressed() && KeyControl.pressed()) Twitter::OpenTweetWindow(U"#Gear_Attack " + versionStr + U" でステージ " + Format(getData().selectedStageNum) + U" を難易度「" + diffStr[getData().selectedDiffNum] + U"」でプレイし、スコア " + Format(getData().gameScore) + U" 点を獲得しました！ ダウンロードはこちら：https://github.com/Bwambocos/Gear-Attack/releases");
 	for (auto& button : charButtons)
 	{
 		if (button.update())
 		{
+			selectSound.play();
 			if (button.getText() == U"[BS]")
 			{
 				if (!getData().playerName.isEmpty()) getData().playerName.pop_back();
@@ -235,5 +256,5 @@ void Ranking::drawInputName() const
 	for (const auto& button : charButtons) button.draw();
 	RoundRect(60, 80, 594, 80, 8).draw(Color(240, 250, 255));
 	FontAsset(U"nameFont")(getData().playerName).draw(77, 90, Color(20));
-	FontAsset(U"nameFont")(U"ENTERキーで決定").drawAt(Window::Width() / 2, Window::Height() - 10 - titleFont.height() / 2);
+	FontAsset(U"infoFont")(U"ENTERで決定 / Ctrl+TでTwitterに共有").drawAt(Window::Width() / 2, Window::Height() - 10 - titleFont.height() / 2);
 }

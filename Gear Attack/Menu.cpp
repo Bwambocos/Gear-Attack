@@ -14,6 +14,7 @@ Menu::Menu(const InitData& init) :IScene(init)
 	rankingThumb = Texture(U"data\\Menu\\rankingThumb.png");
 	startThumb = Texture(U"data\\Menu\\startThumb.png");
 	tutorialThumb = Texture(U"data\\Menu\\tutorialThumb.png");
+	selectSound = Audio(U"data//Menu//selectSound.wav");
 	titleFont = Font(64, Typeface::Bold);
 	choiceFont = Font(42, Typeface::Medium);
 	getData().prevScene = U"Menu";
@@ -27,11 +28,31 @@ void Menu::update()
 	tutorialRect.update();
 	creditRect.update();
 	exitRect.update();
-	if (rankingRect.leftClicked()) changeScene(U"Ranking");
-	if (startRect.leftClicked()) changeScene(U"Select");
-	if (tutorialRect.leftClicked()) changeScene(U"Rule");
-	if (creditRect.leftClicked()) changeScene(U"Credit");
-	if (exitRect.leftClicked()) System::Exit();
+	if (rankingRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Ranking");
+	}
+	if (startRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Select");
+	}
+	if (tutorialRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Rule");
+	}
+	if (creditRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Credit");
+	}
+	if (exitRect.leftClicked())
+	{
+		selectSound.play();
+		System::Exit();
+	}
 }
 
 // メニュー 描画
@@ -45,7 +66,7 @@ void Menu::draw() const
 	rankingThumb.drawAt(rankingRect.center(), (rankingRect.mouseOver() ? Color(222, 222, 222) : Palette::Gray));
 	startThumb.drawAt(startRect.center(), (startRect.mouseOver() ? Color(222, 222, 222) : Palette::Gray));
 	tutorialThumb.drawAt(tutorialRect.center(), (tutorialRect.mouseOver() ? Color(222, 222, 222) : Palette::Gray));
-	titleFont(U"Gear Attack").drawAt(Window::Width() / 2, 56, Color(222, 222, 222));
+	titleFont(U"Gear Attack "+versionStr).drawAt(Window::Width() / 2, 56, Color(222, 222, 222));
 	choiceFont(U"スコア\nボード").drawAt(rankingRect.center(), Color(32, 32, 32));
 	choiceFont(U"ゲームに\n進む").drawAt(startRect.center(), Color(32, 32, 32));
 	choiceFont(U"操作\n説明").drawAt(tutorialRect.center(), Color(32, 32, 32));
