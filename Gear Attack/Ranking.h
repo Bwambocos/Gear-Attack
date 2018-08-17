@@ -48,7 +48,7 @@ class Ranking :public MyApp::Scene
 {
 private:
 	std::vector<rankData>rankingData;
-	HighlightingShape<Rect>choice1Rect, choice2Rect, choice3Rect, choice4Rect, goMenuRect, goSelectRect;
+	HighlightingShape<Rect>choice1Rect, choice2Rect, choice3Rect, choice4Rect, goMenuRect, goSelectRect, enterRect, twitterRect;
 	HighlightingShape<Triangle>goUpTrig, goDownTrig, goLeftTrig, goRightTrig;
 	Audio selectSound;
 	Font titleFont, choiceFont, rankFont;
