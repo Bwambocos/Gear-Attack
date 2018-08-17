@@ -5,7 +5,7 @@
 // const
 const int32 windowWidth = 720;
 const int32 windowHeight = 480;
-const String versionStr = U"v1.1";
+const String versionStr = U"v1.2";
 
 // 共有データ
 struct GameData
