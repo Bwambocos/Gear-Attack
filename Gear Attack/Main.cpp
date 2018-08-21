@@ -8,6 +8,7 @@
 #include "Ranking.h"
 #include "Rule.h"
 #include "Credit.h"
+#include "Settings.h"
 
 void Main()
 {
@@ -24,6 +25,7 @@ void Main()
 	SceneMgr.add<Ranking>(U"Ranking");
 	SceneMgr.add<Rule>(U"Rule");
 	SceneMgr.add<Credit>(U"Credit");
+	SceneMgr.add<Settings>(U"Settings");
 
 	// メインループ
 	while (System::Update())
