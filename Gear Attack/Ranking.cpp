@@ -216,15 +216,16 @@ void Ranking::initInputName()
 	charButtons.emplace_back(U" ", Rect(6 * 50 + 60, 3 * 50 + 200, 144, 44));
 	charButtons.emplace_back(U"[BS]", Rect(9 * 50 + 60, 3 * 50 + 200, 94, 44));
 	FontAsset::Register(U"nameFont", 42, Typeface::Medium);
-	FontAsset::Register(U"infoFont", 32, Typeface::Medium);
+	FontAsset::Register(U"infoFont", 28, Typeface::Medium);
 	FontAsset::Register(U"buttonFont", 24, Typeface::Medium);
+	enterRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4, Window::Height() - 10 - choiceFont.height() / 2), FontAsset(U"infoFont")(U"決定").region().w + 30, 36);
+	twitterRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4 * 3, Window::Height() - 10 - choiceFont.height() / 2), FontAsset(U"infoFont")(U"ツイートで共有").region().w + 30, 36);
 	maxNameLength = Window::Width() - 70 - rankFont(Format(getData().gameScore) + U"点").region().w - rankFont.height() * 2;
 }
 
 // 名前入力 更新
 void Ranking::updateInputName()
 {
-	if (KeyT.pressed() && KeyControl.pressed()) Twitter::OpenTweetWindow(U"#Gear_Attack " + versionStr + U" でステージ " + Format(getData().selectedStageNum) + U" を難易度「" + diffStr[getData().selectedDiffNum] + U"」でプレイし、スコア " + Format(getData().gameScore) + U" 点を獲得しました！");
 	for (auto& button : charButtons)
 	{
 		if (button.update())
@@ -240,12 +241,20 @@ void Ranking::updateInputName()
 	}
 	TextInput::UpdateText(getData().playerName);
 	while (rankFont(getData().playerName).region().w > maxNameLength) getData().playerName.erase(getData().playerName.begin() + getData().playerName.length() - 1);
-	if (getData().playerName.length() > 0 && getData().playerName[getData().playerName.length() - 1] == U'\n')
+	if ((getData().playerName.length() > 0 && getData().playerName[getData().playerName.length() - 1] == U'\n') || enterRect.leftClicked())
 	{
+		selectSound.play();
 		if (getData().playerName[getData().playerName.length() - 1] == U'\n') getData().playerName.erase(getData().playerName.begin() + getData().playerName.length() - 1);
 		if (getData().playerName.length() == 0) getData().playerName = U"名無し";
 		inputNameFlag = false;
 		Ranking::reload(true);
+	}
+	enterRect.update();
+	twitterRect.update();
+	if (twitterRect.leftClicked())
+	{
+		selectSound.play();
+		Twitter::OpenTweetWindow(U"#Gear_Attack " + versionStr + U" でステージ " + Format(getData().selectedStageNum) + U" を難易度「" + diffStr[getData().selectedDiffNum] + U"」でプレイし、スコア " + Format(getData().gameScore) + U" 点を獲得しました！ ダウンロードはこちら：https://github.com/Bwambocos/Gear-Attack/releases");
 	}
 }
 
@@ -255,6 +264,9 @@ void Ranking::drawInputName() const
 	FontAsset(U"nameFont")(U"ランキングにのせる名前を入力").drawAt(Window::Width() / 2, 10 + titleFont.height() / 2);
 	for (const auto& button : charButtons) button.draw();
 	RoundRect(60, 80, 594, 80, 8).draw(Color(240, 250, 255));
+	enterRect.drawHighlight();
+	twitterRect.drawHighlight();
 	FontAsset(U"nameFont")(getData().playerName).draw(77, 90, Color(20));
-	FontAsset(U"infoFont")(U"ENTERで決定 / Ctrl+TでTwitterに共有").drawAt(Window::Width() / 2, Window::Height() - 10 - titleFont.height() / 2);
+	FontAsset(U"infoFont")(U"決定").drawAt(enterRect.center());
+	FontAsset(U"infoFont")(U"ツイートで共有").drawAt(twitterRect.center());
 }
