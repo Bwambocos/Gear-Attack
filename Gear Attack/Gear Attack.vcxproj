@@ -207,6 +207,7 @@
     <ClCompile Include="Ranking.cpp" />
     <ClCompile Include="Rule.cpp" />
     <ClCompile Include="Select.cpp" />
+    <ClCompile Include="Settings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\engine\texture\box-shadow\128.png" />
@@ -267,6 +268,7 @@
     <ClInclude Include="Ranking.h" />
     <ClInclude Include="Rule.h" />
     <ClInclude Include="Select.h" />
+    <ClInclude Include="Settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
