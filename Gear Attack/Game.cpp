@@ -7,7 +7,7 @@
 // ƒQ[ƒ€‰æ–Ê ‰Šú‰»
 Game::Game(const InitData& init) :IScene(init)
 {
-	bgm = Audio(U"data//Game//bgm" + Format(getData().bgmNum) + U".mp3");
+	bgm = Audio(U"data//Game//bgm//bgm" + Format(getData().bgmNum + 1) + U".mp3");
 	gameClearSound = Audio(U"data//Game//gameClearSound.wav");
 	gameOverSound = Audio(U"data//Game//gameOverSound.wav");
 	getStarSound = Audio(U"data//Game//getStarSound.wav");
