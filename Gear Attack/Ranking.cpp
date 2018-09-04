@@ -93,7 +93,7 @@ void Ranking::update()
 		if (rankingBeginNum >= 1)
 		{
 			goUpTrig.update();
-			if (goUpTrig.leftClicked() || Mouse::Wheel() > 0)
+			if (goUpTrig.leftClicked() || Mouse::Wheel() < 0)
 			{
 				selectSound.play();
 				--rankingBeginNum;
@@ -102,7 +102,7 @@ void Ranking::update()
 		if (rankingBeginNum + 5 < (signed)rankingData.size())
 		{
 			goDownTrig.update();
-			if (goDownTrig.leftClicked() || Mouse::Wheel() < 0)
+			if (goDownTrig.leftClicked() || Mouse::Wheel() > 0)
 			{
 				selectSound.play();
 				++rankingBeginNum;
