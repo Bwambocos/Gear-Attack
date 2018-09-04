@@ -47,13 +47,13 @@ public:
 class Ranking :public MyApp::Scene
 {
 private:
-	std::vector<rankData>rankingData;
+	Font titleFont, choiceFont, rankFont;
 	HighlightingShape<Rect>choice1Rect, choice2Rect, choice3Rect, choice4Rect, goMenuRect, goSelectRect, enterRect, twitterRect;
 	HighlightingShape<Triangle>goUpTrig, goDownTrig, goLeftTrig, goRightTrig;
 	Audio selectSound;
-	Font titleFont, choiceFont, rankFont;
 	String diffStr[4] = { U"‚©‚ñ‚½‚ñ",U"‚Ó‚Â‚¤",U"‚Þ‚¸‚©‚µ‚¢",U"‚¢‚¢‚¦" };
 	Array<CharButton> charButtons;
+	std::vector<rankData>rankingData;
 	int diffNum, stageNum, rankingBeginNum, maxNameLength;
 	bool inputNameFlag;
 

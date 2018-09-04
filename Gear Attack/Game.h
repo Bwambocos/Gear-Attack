@@ -1,7 +1,5 @@
 // include
 #pragma once
-#include <Siv3D.hpp>
-#include <HamFramework.hpp>
 #include "Main.h"
 
 // const
@@ -25,9 +23,9 @@ struct doubleTime
 struct enemyData
 {
 	Line attackLine;
+	doubleTime stayTime, moveTime;
 	double moveDistanceX, moveDistanceY;
 	int px, py, tox, toy, moveFlag;
-	doubleTime stayTime, moveTime;
 };
 
 // ÉQÅ[ÉÄâÊñ 
@@ -41,10 +39,10 @@ private:
 	Rect infoRect, lifeRect, timeRect;
 	RoundRect infoMessageRect;
 	Font infoMessageFont, statsFont;
-	doubleTime mainTime, playerTime;
-	enemyData enemys[2];
 	String infoMessage;
 	uint64 score, clearTime;
+	doubleTime mainTime, playerTime;
+	enemyData enemys[2];
 	int stageNum, diffNum, checkPointNum, playerMoveFlag, playerHP;
 	double playerX, playerY, playerXMoveDistance, playerYMoveDistance;
 	bool infoMessageFlag;
