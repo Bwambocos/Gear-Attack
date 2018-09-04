@@ -7,7 +7,7 @@
 // ゲーム画面 初期化
 Game::Game(const InitData& init) :IScene(init)
 {
-	bgm = Audio(U"data//Game//bgm.mp3");
+	bgm = Audio(U"data//Game//bgm//bgm" + Format(getData().bgmNum + 1) + U".mp3");
 	gameClearSound = Audio(U"data//Game//gameClearSound.wav");
 	gameOverSound = Audio(U"data//Game//gameOverSound.wav");
 	getStarSound = Audio(U"data//Game//getStarSound.wav");
@@ -47,8 +47,12 @@ Game::Game(const InitData& init) :IScene(init)
 	Game::initPlayer();
 	Game::initEnemys();
 	getData().prevScene = U"Game";
-	bgm.setLoop(true);
-	bgm.play();
+	if (getData().bgmFlag)
+	{
+		bgm.setLoop(true);
+		bgm.play();
+	}
+	clearTime = 0;
 }
 
 // ゲーム画面 更新
@@ -62,14 +66,14 @@ void Game::update()
 			infoMessageFlag = false;
 			if (checkPointNum == 0)
 			{
-				bgm.stop();
+				if (getData().bgmFlag) bgm.stop();
 				getData().gameScore = playerHP * calcScoreConst / (clearTime / 100);
 				getData().writeRankingFlag = true;
 				changeScene(U"Ranking");
 			}
 			if (playerHP == 0)
 			{
-				bgm.stop();
+				if (getData().bgmFlag) bgm.stop();
 				getData().writeRankingFlag = false;
 				changeScene(U"Ranking");
 			}
@@ -84,14 +88,14 @@ void Game::update()
 			infoMessage = U"ステージクリア！";
 			clearTime = mainTime.nowTime - mainTime.startTime;
 			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
-			gameClearSound.play();
+			if (getData().seFlag) gameClearSound.play();
 		}
 		if (playerHP == 0)
 		{
 			infoMessageFlag = true;
 			infoMessage = U"ゲームオーバー！";
 			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
-			gameOverSound.play();
+			if (getData().seFlag) gameOverSound.play();
 		}
 		Game::updatePlayer();
 		Game::updateEnemys();
@@ -132,7 +136,7 @@ void Game::draw() const
 		break;
 	}
 	statsFont(U"経過時間").draw(495, 132, Color(200, 200, 200));
-	statsFont((!infoMessageFlag ? Format((mainTime.nowTime - mainTime.startTime) / 1000.) : U"0.000")).draw(495, 183, Color(200, 200, 200));
+	statsFont((!infoMessageFlag ? Format((mainTime.nowTime - mainTime.startTime) / 1000.) : Format(clearTime / 1000.))).draw(495, 183, Color(200, 200, 200));
 	statsFont(U"残り体力").draw(495, 249, Palette::Hotpink);
 	RoundRect(495, 300, 210, 35, 2).draw(Palette::Black);
 	RoundRect(495, 300, 210 * playerHP / maxHP, 35, 2).draw((playerHP >= maxHP / 2 ? Palette::Lightgreen : (playerHP >= maxHP / 4 ? Palette::Yellow : Palette::Red)));
@@ -207,7 +211,7 @@ void Game::updatePlayer()
 				playerHP = Min(playerHP, maxHP);
 				fieldData[(int)playerX][(int)playerY] = 0;
 				--checkPointNum;
-				getStarSound.play();
+				if (getData().seFlag) getStarSound.play();
 			}
 		}
 		else
@@ -234,7 +238,7 @@ void Game::updatePlayer()
 	{
 		playerHP -= attackingEnemyHP[diffNum] / 60;
 		playerHP = Max(playerHP, 0);
-		attackedSound.play();
+		if (getData().seFlag) attackedSound.play();
 	}
 }
 
@@ -278,7 +282,7 @@ void Game::updateEnemys()
 				else enemys[1].moveFlag = (enemys[1].py < enemys[1].toy ? 2 : 1);
 				enemys[i].moveTime.nowTime = enemys[i].moveTime.startTime = Time::GetMillisec();
 			}
-			else enemySound.play();
+			else if (getData().seFlag) enemySound.play();
 		}
 		else
 		{
@@ -320,15 +324,18 @@ void Game::updateEnemys()
 // 敵 描画
 void Game::drawEnemys() const
 {
-	if (enemys[0].moveFlag == -1)
+	if (!infoMessageFlag)
 	{
-		enemys[0].attackLine.draw(8, Palette::Orange);
-		enemys[0].attackLine.draw(5, Palette::Orangered);
-	}
-	if (enemys[1].moveFlag == -1)
-	{
-		enemys[1].attackLine.draw(8, Palette::Orange);
-		enemys[1].attackLine.draw(5, Palette::Orangered);
+		if (enemys[0].moveFlag == -1)
+		{
+			enemys[0].attackLine.draw(8, Palette::Orange);
+			enemys[0].attackLine.draw(5, Palette::Orangered);
+		}
+		if (enemys[1].moveFlag == -1)
+		{
+			enemys[1].attackLine.draw(8, Palette::Orange);
+			enemys[1].attackLine.draw(5, Palette::Orangered);
+		}
 	}
 	enemyImg.draw(44 + enemys[0].px*cellSize + enemys[0].moveDistanceX, 10);
 	enemyImg.draw(44 + enemys[0].px*cellSize + enemys[0].moveDistanceX, gameFieldImg.width() - 44);

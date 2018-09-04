@@ -8,8 +8,9 @@
 class Menu :public MyApp::Scene
 {
 private:
-	HighlightingShape<Rect>startRect, rankingRect, tutorialRect, creditRect, exitRect;
+	HighlightingShape<Rect>startRect, rankingRect, tutorialRect, settingsRect, creditRect, exitRect;
 	Texture startThumb, rankingThumb, tutorialThumb;
+	Audio selectSound;
 	Font titleFont, choiceFont;
 
 public:

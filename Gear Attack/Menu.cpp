@@ -9,11 +9,13 @@ Menu::Menu(const InitData& init) :IScene(init)
 	rankingRect = HighlightingShape<Rect>(Arg::center(125, 221), 220, 220);
 	startRect = HighlightingShape<Rect>(Arg::center(360, 221), 220, 220);
 	tutorialRect = HighlightingShape<Rect>(Arg::center(595, 221), 220, 220);
-	creditRect = HighlightingShape<Rect>(Arg::center(242, 405), 220, 119);
-	exitRect = HighlightingShape<Rect>(Arg::center(477, 405), 220, 119);
+	settingsRect = HighlightingShape<Rect>(Arg::center(125, 405), 220, 119);
+	creditRect = HighlightingShape<Rect>(Arg::center(360, 405), 220, 119);
+	exitRect = HighlightingShape<Rect>(Arg::center(595, 405), 220, 119);
 	rankingThumb = Texture(U"data\\Menu\\rankingThumb.png");
 	startThumb = Texture(U"data\\Menu\\startThumb.png");
 	tutorialThumb = Texture(U"data\\Menu\\tutorialThumb.png");
+	selectSound = Audio(U"data//Menu//selectSound.wav");
 	titleFont = Font(64, Typeface::Bold);
 	choiceFont = Font(42, Typeface::Medium);
 	getData().prevScene = U"Menu";
@@ -25,13 +27,39 @@ void Menu::update()
 	rankingRect.update();
 	startRect.update();
 	tutorialRect.update();
+	settingsRect.update();
 	creditRect.update();
 	exitRect.update();
-	if (rankingRect.leftClicked()) changeScene(U"Ranking");
-	if (startRect.leftClicked()) changeScene(U"Select");
-	if (tutorialRect.leftClicked()) changeScene(U"Rule");
-	if (creditRect.leftClicked()) changeScene(U"Credit");
-	if (exitRect.leftClicked()) System::Exit();
+	if (rankingRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Ranking");
+	}
+	if (startRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Select");
+	}
+	if (tutorialRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Rule");
+	}
+	if (settingsRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Settings");
+	}
+	if (creditRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Credit");
+	}
+	if (exitRect.leftClicked())
+	{
+		selectSound.play();
+		System::Exit();
+	}
 }
 
 // メニュー 描画
@@ -40,15 +68,17 @@ void Menu::draw() const
 	rankingRect.drawHighlight();
 	startRect.drawHighlight();
 	tutorialRect.drawHighlight();
+	settingsRect.drawHighlight();
 	creditRect.drawHighlight();
 	exitRect.drawHighlight();
 	rankingThumb.drawAt(rankingRect.center(), (rankingRect.mouseOver() ? Color(222, 222, 222) : Palette::Gray));
 	startThumb.drawAt(startRect.center(), (startRect.mouseOver() ? Color(222, 222, 222) : Palette::Gray));
 	tutorialThumb.drawAt(tutorialRect.center(), (tutorialRect.mouseOver() ? Color(222, 222, 222) : Palette::Gray));
-	titleFont(U"Gear Attack").drawAt(Window::Width() / 2, 56, Color(222, 222, 222));
+	titleFont(U"Gear Attack "+versionStr).drawAt(Window::Width() / 2, 56, Color(222, 222, 222));
 	choiceFont(U"スコア\nボード").drawAt(rankingRect.center(), Color(32, 32, 32));
 	choiceFont(U"ゲームに\n進む").drawAt(startRect.center(), Color(32, 32, 32));
 	choiceFont(U"操作\n説明").drawAt(tutorialRect.center(), Color(32, 32, 32));
+	choiceFont(U"設定").drawAt(settingsRect.center(), Color(32, 32, 32));
 	choiceFont(U"クレジット").drawAt(creditRect.center(), Color(32, 32, 32));
 	choiceFont(U"終了する").drawAt(exitRect.center(), Color(32, 32, 32));
 }

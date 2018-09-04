@@ -4,17 +4,16 @@
 #include <HamFramework.hpp>
 #include "Main.h"
 
-// クレジット
-class Credit :public MyApp::Scene
+// 設定
+class Settings :public MyApp::Scene
 {
 private:
-	Texture mainImg;
-	Font choiceFont;
+	Font titleFont, choiceFont;
 	Audio selectSound;
-	HighlightingShape<Rect>goMenuRect, goTwitterRect;
+	HighlightingShape<Rect>goMenuRect, bgmCheckRect, bgmNumRect, seCheckRect;
 
 public:
-	Credit(const InitData& init);
+	Settings(const InitData& init);
 	void update() override;
 	void draw() const override;
 };

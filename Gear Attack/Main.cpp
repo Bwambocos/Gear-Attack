@@ -8,11 +8,12 @@
 #include "Ranking.h"
 #include "Rule.h"
 #include "Credit.h"
+#include "Settings.h"
 
 void Main()
 {
 	Window::Resize({ windowWidth,windowHeight }, true);
-	Window::SetTitle(U"Gear Attack v1.0");
+	Window::SetTitle(U"Gear Attack " + versionStr);
 	Graphics::SetBackground(Palette::Seagreen);
 
 	// 使用するシーン
@@ -24,6 +25,7 @@ void Main()
 	SceneMgr.add<Ranking>(U"Ranking");
 	SceneMgr.add<Rule>(U"Rule");
 	SceneMgr.add<Credit>(U"Credit");
+	SceneMgr.add<Settings>(U"Settings");
 
 	// メインループ
 	while (System::Update())
