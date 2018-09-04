@@ -17,8 +17,9 @@ Select::Select(const InitData& init) :IScene(init)
 	titleFont = Font(54, Typeface::Bold);
 	stageFont = Font(42, Typeface::Regular);
 	diffFont = Font(45, Typeface::Regular);
-	startFont = Font(36, Typeface::Medium);
-	startRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 2, 441), startFont(U"ゲームスタート").region().w + 30, 48);
+	choiceFont = Font(36, Typeface::Medium);
+	startRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4 * 3, 441), choiceFont(U"ゲームスタート").region().w + 30, 48);
+	backToMenuRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4, 441), choiceFont(U"メニューに戻る").region().w + 30, 48);
 	stageNum = 0;
 	while (FileSystem::Exists(U"data/Game/s" + Format(stageNum + 1) + U".txt")) ++stageNum;
 	getData().selectedStageNum = -1;
@@ -54,6 +55,7 @@ void Select::update()
 		}
 	}
 	startRect.update();
+	backToMenuRect.update();
 	if (getData().stageListBeginNum > 1)
 	{
 		goUpTrig.update();
@@ -77,6 +79,11 @@ void Select::update()
 		selectSound.play();
 		changeScene(U"Game");
 	}
+	if (backToMenuRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Menu");
+	}
 }
 
 // ステージ選択 描画
@@ -89,6 +96,7 @@ void Select::draw() const
 	}
 	for (auto i : step(4)) diffRect[i].drawHighlight((i == getData().selectedDiffNum ? Color(0, 255, 255) : Color(255, 255, 255)));
 	startRect.drawHighlight();
+	backToMenuRect.drawHighlight();
 	if (getData().stageListBeginNum > 1) goUpTrig.drawHighlight();
 	if (getData().stageListBeginNum + 3 <= stageNum) goDownTrig.drawHighlight();
 	titleLine.draw(LineStyle::RoundDot, 3);
@@ -101,5 +109,6 @@ void Select::draw() const
 		stageFont(U"ステージ" + Format(i + getData().stageListBeginNum)).drawAt(stageRect[i].center(), Color(32, 32, 32));
 	}
 	for (auto i : step(4)) diffFont(diffString[i]).drawAt(diffRect[i].center(), Color(32, 32, 32));
-	startFont(U"ゲームスタート").drawAt(Window::Width() / 2, 441, (getData().selectedStageNum != -1 && getData().selectedDiffNum != -1 ? Color(255, 64, 64) : Palette::Gray));
+	choiceFont(U"ゲームスタート").drawAt(Window::Width() / 4 * 3, 441, (getData().selectedStageNum != -1 && getData().selectedDiffNum != -1 ? Color(255, 64, 64) : Palette::Gray));
+	choiceFont(U"メニューに戻る").drawAt(Window::Width() / 4, 441, Color(32, 32, 32));
 }

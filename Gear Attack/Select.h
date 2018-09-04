@@ -8,11 +8,11 @@
 class Select :public MyApp::Scene
 {
 private:
-	HighlightingShape<Rect> stageRect[3], diffRect[4], startRect;
+	HighlightingShape<Rect> stageRect[3], diffRect[4], startRect, backToMenuRect;
 	HighlightingShape<Triangle> goUpTrig, goDownTrig;
 	Audio selectSound;
 	Line titleLine, startLine, centerLine;
-	Font titleFont, stageFont, diffFont, startFont;
+	Font titleFont, stageFont, diffFont, choiceFont;
 	String diffString[4] = { U"‚©‚ñ‚½‚ñ",U"‚Ó‚Â‚¤",U"‚Þ‚¸‚©‚µ‚¢",U"‚¢‚¢‚¦" };
 	int stageNum;
 
