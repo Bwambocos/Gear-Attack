@@ -57,7 +57,7 @@ void Select::update()
 	if (getData().stageListBeginNum > 1)
 	{
 		goUpTrig.update();
-		if (goUpTrig.leftClicked() || Mouse::Wheel() > 0)
+		if (goUpTrig.leftClicked() || Mouse::Wheel() < 0)
 		{
 			selectSound.play();
 			--getData().stageListBeginNum;
@@ -66,7 +66,7 @@ void Select::update()
 	if (getData().stageListBeginNum + 3 <= stageNum)
 	{
 		goDownTrig.update();
-		if (goDownTrig.leftClicked() || Mouse::Wheel() < 0)
+		if (goDownTrig.leftClicked() || Mouse::Wheel() > 0)
 		{
 			selectSound.play();
 			++getData().stageListBeginNum;
