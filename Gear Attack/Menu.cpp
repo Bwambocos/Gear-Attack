@@ -9,8 +9,9 @@ Menu::Menu(const InitData& init) :IScene(init)
 	rankingRect = HighlightingShape<Rect>(Arg::center(125, 221), 220, 220);
 	startRect = HighlightingShape<Rect>(Arg::center(360, 221), 220, 220);
 	tutorialRect = HighlightingShape<Rect>(Arg::center(595, 221), 220, 220);
-	creditRect = HighlightingShape<Rect>(Arg::center(242, 405), 220, 119);
-	exitRect = HighlightingShape<Rect>(Arg::center(477, 405), 220, 119);
+	settingsRect = HighlightingShape<Rect>(Arg::center(125, 405), 220, 119);
+	creditRect = HighlightingShape<Rect>(Arg::center(360, 405), 220, 119);
+	exitRect = HighlightingShape<Rect>(Arg::center(595, 405), 220, 119);
 	rankingThumb = Texture(U"data\\Menu\\rankingThumb.png");
 	startThumb = Texture(U"data\\Menu\\startThumb.png");
 	tutorialThumb = Texture(U"data\\Menu\\tutorialThumb.png");
@@ -26,6 +27,7 @@ void Menu::update()
 	rankingRect.update();
 	startRect.update();
 	tutorialRect.update();
+	settingsRect.update();
 	creditRect.update();
 	exitRect.update();
 	if (rankingRect.leftClicked())
@@ -42,6 +44,11 @@ void Menu::update()
 	{
 		selectSound.play();
 		changeScene(U"Rule");
+	}
+	if (settingsRect.leftClicked())
+	{
+		selectSound.play();
+		changeScene(U"Settings");
 	}
 	if (creditRect.leftClicked())
 	{
@@ -61,6 +68,7 @@ void Menu::draw() const
 	rankingRect.drawHighlight();
 	startRect.drawHighlight();
 	tutorialRect.drawHighlight();
+	settingsRect.drawHighlight();
 	creditRect.drawHighlight();
 	exitRect.drawHighlight();
 	rankingThumb.drawAt(rankingRect.center(), (rankingRect.mouseOver() ? Color(222, 222, 222) : Palette::Gray));
@@ -70,6 +78,7 @@ void Menu::draw() const
 	choiceFont(U"スコア\nボード").drawAt(rankingRect.center(), Color(32, 32, 32));
 	choiceFont(U"ゲームに\n進む").drawAt(startRect.center(), Color(32, 32, 32));
 	choiceFont(U"操作\n説明").drawAt(tutorialRect.center(), Color(32, 32, 32));
+	choiceFont(U"設定").drawAt(settingsRect.center(), Color(32, 32, 32));
 	choiceFont(U"クレジット").drawAt(creditRect.center(), Color(32, 32, 32));
 	choiceFont(U"終了する").drawAt(exitRect.center(), Color(32, 32, 32));
 }
