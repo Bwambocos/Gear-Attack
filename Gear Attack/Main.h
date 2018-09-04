@@ -10,10 +10,10 @@ const String versionStr = U"v1.3";
 // 共有データ
 struct GameData
 {
-	int stageListBeginNum = 1, selectedStageNum, selectedDiffNum, bgmNum = 0;
-	bool writeRankingFlag, firstPlayFlag = true, bgmFlag = true, seFlag = true;
 	uint64 gameScore;
 	String playerName = U"名無し", prevScene;
+	int stageListBeginNum = 1, selectedStageNum, selectedDiffNum, bgmNum = 0;
+	bool writeRankingFlag, firstPlayFlag = true, bgmFlag = true, seFlag = true;
 };
 
 using MyApp = SceneManager<String, GameData>;
