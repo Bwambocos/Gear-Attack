@@ -7,14 +7,14 @@
 // ゲーム画面 初期化
 Game::Game(const InitData& init) :IScene(init)
 {
-	bgm = Audio(U"data//Game//bgm.mp3");
+	gameFieldImg = Texture(U"data/Game/gameField.png");
+	for (auto i : step(fieldCellKinds)) fieldCellImg[i] = Texture(U"data/Game/cell" + Format(i + 1) + U".png");
+	bgm = Audio(U"data//Game//bgm//bgm" + Format(getData().bgmNum + 1) + U".mp3");
 	gameClearSound = Audio(U"data//Game//gameClearSound.wav");
 	gameOverSound = Audio(U"data//Game//gameOverSound.wav");
 	getStarSound = Audio(U"data//Game//getStarSound.wav");
 	enemySound = Audio(U"data//Game//enemySound.wav");
 	attackedSound = Audio(U"data//Game//attackedSound.wav");
-	gameFieldImg = Texture(U"data/Game/gameField.png");
-	for (auto i : step(fieldCellKinds)) fieldCellImg[i] = Texture(U"data/Game/cell" + Format(i + 1) + U".png");
 	fieldData = Grid<int>(fieldSize / cellSize, fieldSize / cellSize);
 	fieldReader = TextReader(U"data/Game/s" + Format(getData().selectedStageNum) + U".txt");
 	String tmp;
@@ -40,6 +40,7 @@ Game::Game(const InitData& init) :IScene(init)
 	infoMessageFont = Font(72, Typeface::Heavy);
 	statsFont = Font(36, Typeface::Bold);
 	infoMessage = U"ゲームスタート！";
+	clearTime = 0;
 	mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
 	stageNum = getData().selectedStageNum;
 	diffNum = getData().selectedDiffNum;
@@ -47,9 +48,11 @@ Game::Game(const InitData& init) :IScene(init)
 	Game::initPlayer();
 	Game::initEnemys();
 	getData().prevScene = U"Game";
-	bgm.setLoop(true);
-	bgm.play();
-	clearTime = 0;
+	if (getData().bgmFlag)
+	{
+		bgm.setLoop(true);
+		bgm.play();
+	}
 }
 
 // ゲーム画面 更新
@@ -63,14 +66,14 @@ void Game::update()
 			infoMessageFlag = false;
 			if (checkPointNum == 0)
 			{
-				bgm.stop();
+				if (getData().bgmFlag) bgm.stop();
 				getData().gameScore = playerHP * calcScoreConst / (clearTime / 100);
 				getData().writeRankingFlag = true;
 				changeScene(U"Ranking");
 			}
 			if (playerHP == 0)
 			{
-				bgm.stop();
+				if (getData().bgmFlag) bgm.stop();
 				getData().writeRankingFlag = false;
 				changeScene(U"Ranking");
 			}
@@ -85,14 +88,14 @@ void Game::update()
 			infoMessage = U"ステージクリア！";
 			clearTime = mainTime.nowTime - mainTime.startTime;
 			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
-			gameClearSound.play();
+			if (getData().seFlag) gameClearSound.play();
 		}
 		if (playerHP == 0)
 		{
 			infoMessageFlag = true;
 			infoMessage = U"ゲームオーバー！";
 			mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
-			gameOverSound.play();
+			if (getData().seFlag) gameOverSound.play();
 		}
 		Game::updatePlayer();
 		Game::updateEnemys();
@@ -208,7 +211,7 @@ void Game::updatePlayer()
 				playerHP = Min(playerHP, maxHP);
 				fieldData[(int)playerX][(int)playerY] = 0;
 				--checkPointNum;
-				getStarSound.play();
+				if (getData().seFlag) getStarSound.play();
 			}
 		}
 		else
@@ -235,7 +238,7 @@ void Game::updatePlayer()
 	{
 		playerHP -= attackingEnemyHP[diffNum] / 60;
 		playerHP = Max(playerHP, 0);
-		attackedSound.play();
+		if (getData().seFlag) attackedSound.play();
 	}
 }
 
@@ -279,7 +282,7 @@ void Game::updateEnemys()
 				else enemys[1].moveFlag = (enemys[1].py < enemys[1].toy ? 2 : 1);
 				enemys[i].moveTime.nowTime = enemys[i].moveTime.startTime = Time::GetMillisec();
 			}
-			else enemySound.play();
+			else if (getData().seFlag) enemySound.play();
 		}
 		else
 		{
