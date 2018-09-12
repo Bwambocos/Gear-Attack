@@ -36,7 +36,7 @@ void Settings::update()
 	{
 		selectSound.play();
 		++getData().bgmNum;
-		getData().bgmNum %= 2;
+		getData().bgmNum %= 3;
 	}
 	if (seCheckRect.leftClicked())
 	{
