@@ -66,6 +66,9 @@
     <ClCompile Include="Credit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\icon.ico">
@@ -220,6 +223,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Credit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

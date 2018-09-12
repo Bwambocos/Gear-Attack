@@ -6,23 +6,23 @@
 // ランキング 初期化
 Ranking::Ranking(const InitData& init) :IScene(init)
 {
-	diffNum = getData().selectedDiffNum;
-	stageNum = getData().selectedStageNum;
-	rankingBeginNum = 0;
 	titleFont = Font(54, Typeface::Bold);
 	choiceFont = Font(28);
 	rankFont = Font(36);
+	goMenuRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4, Window::Height() - 10 - choiceFont.height() / 2), choiceFont(U"メニューへ戻る").region().w + 30, 36);
+	goSelectRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4 * 3, Window::Height() - 10 - choiceFont.height() / 2), choiceFont(U"ゲームへ戻る").region().w + 30, 36);
 	choice1Rect.x = 10; choice1Rect.y = 20 + titleFont.height(); choice1Rect.w = (Window::Width() - 50) / 4; choice1Rect.h = 54;
 	choice2Rect.x = choice1Rect.x + choice1Rect.w + 10; choice2Rect.y = 20 + titleFont.height(); choice2Rect.w = (Window::Width() - 50) / 4; choice2Rect.h = 54;
 	choice3Rect.x = choice2Rect.x + choice2Rect.w + 10; choice3Rect.y = 20 + titleFont.height(); choice3Rect.w = (Window::Width() - 50) / 4; choice3Rect.h = 54;
 	choice4Rect.x = choice3Rect.x + choice3Rect.w + 10; choice4Rect.y = 20 + titleFont.height(); choice4Rect.w = (Window::Width() - 50) / 4; choice4Rect.h = 54;
-	goMenuRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4, Window::Height() - 10 - choiceFont.height() / 2), choiceFont(U"メニューへ戻る").region().w + 30, 36);
-	goSelectRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4 * 3, Window::Height() - 10 - choiceFont.height() / 2), choiceFont(U"ゲームへ戻る").region().w + 30, 36);
 	goUpTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10, 25, choice1Rect.y + choice1Rect.h + 25, 10, choice1Rect.y + choice1Rect.h + 25);
 	goDownTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10 + rankFont.height() * 5, 10, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5, 25, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5);
 	goLeftTrig = HighlightingShape<Triangle>(10, 35, 60, 10, 60, 60);
 	goRightTrig = HighlightingShape<Triangle>(Window::Width() - 10, 35, Window::Width() - 60, 60, Window::Width() - 60, 10);
 	selectSound = Audio(U"data//Ranking//selectSound.wav");
+	diffNum = getData().selectedDiffNum;
+	stageNum = getData().selectedStageNum;
+	rankingBeginNum = 0;
 	if (getData().prevScene == U"Game")
 	{
 		if (getData().writeRankingFlag)
@@ -93,7 +93,7 @@ void Ranking::update()
 		if (rankingBeginNum >= 1)
 		{
 			goUpTrig.update();
-			if (goUpTrig.leftClicked() || Mouse::Wheel() > 0)
+			if (goUpTrig.leftClicked() || Mouse::Wheel() < 0)
 			{
 				selectSound.play();
 				--rankingBeginNum;
@@ -102,7 +102,7 @@ void Ranking::update()
 		if (rankingBeginNum + 5 < (signed)rankingData.size())
 		{
 			goDownTrig.update();
-			if (goDownTrig.leftClicked() || Mouse::Wheel() < 0)
+			if (goDownTrig.leftClicked() || Mouse::Wheel() > 0)
 			{
 				selectSound.play();
 				++rankingBeginNum;

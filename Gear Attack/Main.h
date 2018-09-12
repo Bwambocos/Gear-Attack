@@ -5,15 +5,15 @@
 // const
 const int32 windowWidth = 720;
 const int32 windowHeight = 480;
-const String versionStr = U"v1.2";
+const String versionStr = U"v1.4";
 
 // 共有データ
 struct GameData
 {
-	int stageListBeginNum = 1, selectedStageNum, selectedDiffNum, bgmNum = 1;
-	bool writeRankingFlag, firstPlayFlag = true, bgmFlag = false, seFlag = false;
 	uint64 gameScore;
 	String playerName = U"名無し", prevScene;
+	int stageListBeginNum = 1, selectedStageNum, selectedDiffNum, bgmNum = 0;
+	bool writeRankingFlag, firstPlayFlag = true, bgmFlag = true, seFlag = true;
 };
 
 using MyApp = SceneManager<String, GameData>;

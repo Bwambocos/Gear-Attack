@@ -7,14 +7,14 @@
 // ゲーム画面 初期化
 Game::Game(const InitData& init) :IScene(init)
 {
-	bgm = Audio(U"data//Game//bgm" + Format(getData().bgmNum) + U".mp3");
+	gameFieldImg = Texture(U"data/Game/gameField.png");
+	for (auto i : step(fieldCellKinds)) fieldCellImg[i] = Texture(U"data/Game/cell" + Format(i + 1) + U".png");
+	bgm = Audio(U"data//Game//bgm//bgm" + Format(getData().bgmNum + 1) + U".mp3");
 	gameClearSound = Audio(U"data//Game//gameClearSound.wav");
 	gameOverSound = Audio(U"data//Game//gameOverSound.wav");
 	getStarSound = Audio(U"data//Game//getStarSound.wav");
 	enemySound = Audio(U"data//Game//enemySound.wav");
 	attackedSound = Audio(U"data//Game//attackedSound.wav");
-	gameFieldImg = Texture(U"data/Game/gameField.png");
-	for (auto i : step(fieldCellKinds)) fieldCellImg[i] = Texture(U"data/Game/cell" + Format(i + 1) + U".png");
 	fieldData = Grid<int>(fieldSize / cellSize, fieldSize / cellSize);
 	fieldReader = TextReader(U"data/Game/s" + Format(getData().selectedStageNum) + U".txt");
 	String tmp;
@@ -40,6 +40,7 @@ Game::Game(const InitData& init) :IScene(init)
 	infoMessageFont = Font(72, Typeface::Heavy);
 	statsFont = Font(36, Typeface::Bold);
 	infoMessage = U"ゲームスタート！";
+	clearTime = 0;
 	mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
 	stageNum = getData().selectedStageNum;
 	diffNum = getData().selectedDiffNum;
@@ -52,7 +53,6 @@ Game::Game(const InitData& init) :IScene(init)
 		bgm.setLoop(true);
 		bgm.play();
 	}
-	clearTime = 0;
 }
 
 // ゲーム画面 更新
