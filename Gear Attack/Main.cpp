@@ -12,13 +12,13 @@
 
 void Main()
 {
-	Scene::Resize(windowWidth, windowHeight);
+	Window::Resize(windowWidth, windowHeight);
 	Window::SetTitle(U"Gear Attack " + versionStr);
-	Scene::SetBackground(Palette::Seagreen);
+	Scene::SetBackground(Color(22, 22, 22));
 
 	// 使用するシーン
 	MyApp SceneMgr;
-	SceneMgr.setFadeColor(Color(255, 255, 255));
+	SceneMgr.setFadeColor(Color(22, 22, 22));
 	SceneMgr.add<Menu>(U"Menu");
 	SceneMgr.add<Select>(U"Select");
 	SceneMgr.add<Game>(U"Game");

@@ -6,9 +6,9 @@
 // ランキング 初期化
 Ranking::Ranking(const InitData& init) :IScene(init)
 {
-	titleFont = Font(54, Typeface::Bold);
-	choiceFont = Font(28);
-	rankFont = Font(36);
+	titleFont = Font(54, U"data//FontR.ttc", FontStyle::Bold);
+	choiceFont = Font(28, U"data//FontR.ttc");
+	rankFont = Font(36, U"data//FontR.ttc");
 	goMenuRect = HighlightingShape<Rect>(Arg::center(Scene::Width() / 4, Scene::Height() - 10 - choiceFont.height() / 2), choiceFont(U"メニューへ戻る").region().w + 30, 36);
 	goSelectRect = HighlightingShape<Rect>(Arg::center(Scene::Width() / 4 * 3, Scene::Height() - 10 - choiceFont.height() / 2), choiceFont(U"ゲームへ戻る").region().w + 30, 36);
 	choice1Rect.x = 10; choice1Rect.y = 20 + titleFont.height(); choice1Rect.w = (Scene::Width() - 50) / 4; choice1Rect.h = 54;
@@ -138,28 +138,28 @@ void Ranking::draw() const
 {
 	if (!inputNameFlag)
 	{
-		titleFont(U"ステージ" + Format(stageNum)).drawAt(Scene::Width() / 2, 10 + titleFont.height() / 2);
-		choice1Rect.drawHighlight(diffNum == 0 ? Color(0, 255, 255) : Color(255, 255, 255));
-		choice2Rect.drawHighlight(diffNum == 1 ? Color(0, 255, 255) : Color(255, 255, 255));
-		choice3Rect.drawHighlight(diffNum == 2 ? Color(0, 255, 255) : Color(255, 255, 255));
-		choice4Rect.drawHighlight(diffNum == 3 ? Color(0, 255, 255) : Color(255, 255, 255));
-		goMenuRect.drawHighlight(goMenuRect.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-		goSelectRect.drawHighlight(goSelectRect.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-		choiceFont(diffStr[0]).drawAt(choice1Rect.center());
-		choiceFont(diffStr[1]).drawAt(choice2Rect.center());
-		choiceFont(diffStr[2]).drawAt(choice3Rect.center());
-		choiceFont(diffStr[3]).drawAt(choice4Rect.center());
-		choiceFont(U"メニューへ戻る").drawAt(Scene::Width() / 4, Scene::Height() - 10 - choiceFont.height() / 2);
-		choiceFont(U"ゲームへ戻る").drawAt(Scene::Width() / 4 * 3, Scene::Height() - 10 - choiceFont.height() / 2);
-		if (rankingBeginNum >= 1) goUpTrig.drawHighlight(goUpTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-		if (rankingBeginNum + 5 < (signed)rankingData.size()) goDownTrig.drawHighlight(goDownTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-		if (stageNum > 1) goLeftTrig.drawHighlight(goLeftTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-		if (FileSystem::Exists(U"data/Game/s" + Format(stageNum + 1) + U".txt")) goRightTrig.drawHighlight(goRightTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
+		titleFont(U"ステージ" + Format(stageNum)).drawAt(Scene::Width() / 2, 10 + titleFont.height() / 2, getData().stringColor);
+		choice1Rect.drawHighlight(diffNum == 0 ? getData().schemeColor5 : getData().schemeColor3);
+		choice2Rect.drawHighlight(diffNum == 1 ? getData().schemeColor5 : getData().schemeColor3);
+		choice3Rect.drawHighlight(diffNum == 2 ? getData().schemeColor5 : getData().schemeColor3);
+		choice4Rect.drawHighlight(diffNum == 3 ? getData().schemeColor5 : getData().schemeColor3);
+		goMenuRect.drawHighlight(goMenuRect.mouseOver() ? getData().schemeColor5 : getData().schemeColor4);
+		goSelectRect.drawHighlight(goSelectRect.mouseOver() ? getData().schemeColor5 : getData().schemeColor4);
+		choiceFont(diffStr[0]).drawAt(choice1Rect.center(), getData().stringColor);
+		choiceFont(diffStr[1]).drawAt(choice2Rect.center(), getData().stringColor);
+		choiceFont(diffStr[2]).drawAt(choice3Rect.center(), getData().stringColor);
+		choiceFont(diffStr[3]).drawAt(choice4Rect.center(), getData().stringColor);
+		choiceFont(U"メニューへ戻る").drawAt(Scene::Width() / 4, Scene::Height() - 10 - choiceFont.height() / 2, getData().stringColor);
+		choiceFont(U"ゲームへ戻る").drawAt(Scene::Width() / 4 * 3, Scene::Height() - 10 - choiceFont.height() / 2, getData().stringColor);
+		if (rankingBeginNum >= 1) goUpTrig.drawHighlight(goUpTrig.mouseOver() ? getData().schemeColor5 : getData().schemeColor4);
+		if (rankingBeginNum + 5 < (signed)rankingData.size()) goDownTrig.drawHighlight(goDownTrig.mouseOver() ? getData().schemeColor5 : getData().schemeColor4);
+		if (stageNum > 1) goLeftTrig.drawHighlight(goLeftTrig.mouseOver() ? getData().schemeColor5 : getData().schemeColor4);
+		if (FileSystem::Exists(U"data/Game/s" + Format(stageNum + 1) + U".txt")) goRightTrig.drawHighlight(goRightTrig.mouseOver() ? getData().schemeColor5 : getData().schemeColor4);
 		for (auto i : step(Min<int>(5, (int)rankingData.size() - rankingBeginNum)))
 		{
-			rankFont(Format(i + 1 + rankingBeginNum) + U"位 " + rankingData[i + rankingBeginNum].second).draw(35, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i, rankingData[i + rankingBeginNum].second == getData().playerName ? Palette::Orange : Palette::White);
+			rankFont(Format(i + 1 + rankingBeginNum) + U"位 " + rankingData[i + rankingBeginNum].second).draw(35, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i, rankingData[i + rankingBeginNum].second == getData().playerName ? Palette::Orange : getData().stringColor);
 			auto scoreWidth = rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").region().w;
-			rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").draw(Scene::Width() - 35 - scoreWidth, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i, rankingData[i + rankingBeginNum].second == getData().playerName ? Palette::Orange : Palette::White);
+			rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").draw(Scene::Width() - 35 - scoreWidth, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i, rankingData[i + rankingBeginNum].second == getData().playerName ? Palette::Orange : getData().stringColor);
 		}
 	}
 	else drawInputName();

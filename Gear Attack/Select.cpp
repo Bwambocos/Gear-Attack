@@ -6,10 +6,10 @@
 // ステージ選択 初期化
 Select::Select(const InitData& init) :IScene(init)
 {
-	titleFont = Font(54, Typeface::Bold);
-	stageFont = Font(42, Typeface::Regular);
-	diffFont = Font(45, Typeface::Regular);
-	choiceFont = Font(36, Typeface::Medium);
+	titleFont = Font(54, U"data//fontR.ttc", FontStyle::Bold);
+	stageFont = Font(42, U"data//fontR.ttc", FontStyle::Default);
+	diffFont = Font(45, U"data//fontR.ttc", FontStyle::Default);
+	choiceFont = Font(36, U"data//fontR.ttc", FontStyle::Default);
 	for (auto i : step(3)) stageRect[i] = HighlightingShape<Rect>(15, 144 + 71 * i, 330, 56);
 	for (auto i : step(4)) diffRect[i] = HighlightingShape<Rect>(375, 99 + 75 * i, 330, 60);
 	startRect = HighlightingShape<Rect>(Arg::center(Scene::Width() / 4 * 3, 441), choiceFont(U"ゲームスタート").region().w + 30, 48);
@@ -92,9 +92,9 @@ void Select::draw() const
 	for (auto i : step(3))
 	{
 		if (i + getData().stageListBeginNum > stageNum) break;
-		stageRect[i].drawHighlight((i + getData().stageListBeginNum == getData().selectedStageNum ? Color(0, 255, 255) : Color(255, 255, 255)));
+		stageRect[i].drawHighlight((i + getData().stageListBeginNum == getData().selectedStageNum ? Color(255, 64, 64) : getData().schemeColor4));
 	}
-	for (auto i : step(4)) diffRect[i].drawHighlight((i == getData().selectedDiffNum ? Color(0, 255, 255) : Color(255, 255, 255)));
+	for (auto i : step(4)) diffRect[i].drawHighlight((i == getData().selectedDiffNum ? Color(255, 64, 64) : getData().schemeColor4));
 	startRect.drawHighlight();
 	backToMenuRect.drawHighlight();
 	if (getData().stageListBeginNum > 1) goUpTrig.drawHighlight();
@@ -102,13 +102,13 @@ void Select::draw() const
 	titleLine.draw(LineStyle::RoundDot, 3);
 	startLine.draw(LineStyle::RoundDot, 3);
 	centerLine.draw(LineStyle::RoundDot, 3);
-	titleFont(U"ステージと難易度を選択").drawAt(Scene::Width() / 2, 42, Color(255, 165, 64));
+	titleFont(U"ステージと難易度を選択").drawAt(Scene::Width() / 2, 42, getData().stringColor);
 	for (auto i : step(3))
 	{
 		if (i + getData().stageListBeginNum > stageNum) break;
-		stageFont(U"ステージ" + Format(i + getData().stageListBeginNum)).drawAt(stageRect[i].center(), Color(32, 32, 32));
+		stageFont(U"ステージ" + Format(i + getData().stageListBeginNum)).drawAt(stageRect[i].center(), getData().stringColor);
 	}
-	for (auto i : step(4)) diffFont(diffString[i]).drawAt(diffRect[i].center(), Color(32, 32, 32));
-	choiceFont(U"ゲームスタート").drawAt(Scene::Width() / 4 * 3, 441, (getData().selectedStageNum != -1 && getData().selectedDiffNum != -1 ? Color(255, 64, 64) : Palette::Gray));
-	choiceFont(U"メニューに戻る").drawAt(Scene::Width() / 4, 441, Color(32, 32, 32));
+	for (auto i : step(4)) diffFont(diffString[i]).drawAt(diffRect[i].center(), getData().stringColor);
+	choiceFont(U"ゲームスタート").drawAt(Scene::Width() / 4 * 3, 441, (getData().selectedStageNum != -1 && getData().selectedDiffNum != -1 ? Color(255, 64, 64) : getData().stringColor));
+	choiceFont(U"メニューに戻る").drawAt(Scene::Width() / 4, 441, getData().stringColor);
 }

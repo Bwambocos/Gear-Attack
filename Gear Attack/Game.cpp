@@ -37,8 +37,8 @@ Game::Game(const InitData& init) :IScene(init)
 	timeRect = Rect(490, 127, 220, 107);
 	lifeRect = Rect(490, 244, 220, 96);
 	infoMessageRect = RoundRect(25, 25, Scene::Width() - 50, Scene::Height() - 50, 10);
-	infoMessageFont = Font(72, Typeface::Heavy);
-	statsFont = Font(36, Typeface::Bold);
+	infoMessageFont = Font(72, U"data//fontR.ttc", FontStyle::Bold);
+	statsFont = Font(36, U"data//fontR.ttc", FontStyle::Bold);
 	infoMessage = U"ゲームスタート！";
 	clearTime = 0;
 	mainTime.nowTime = mainTime.startTime = Time::GetMillisec();
@@ -113,13 +113,13 @@ void Game::draw() const
 			fieldCellImg[fieldData[x][y]].draw(44 + x * cellSize, 44 + y * cellSize);
 		}
 	}
-	infoRect.draw(Color(255, 255, 255, 120));
-	infoRect.drawFrame(2);
-	timeRect.draw(Color(64, 64, 64, 120));
-	timeRect.drawFrame(2, Color(16, 16, 16));
-	lifeRect.draw(Color(255, 132, 143, 120));
-	lifeRect.drawFrame(2, Color(255, 132, 143));
-	statsFont(U"ステージ" + Format(stageNum)).draw(495, 15, Palette::Black);
+	infoRect.draw(getData().schemeColor2);
+	infoRect.drawFrame(2, getData().schemeColor3);
+	timeRect.draw(getData().schemeColor2);
+	timeRect.drawFrame(2, getData().schemeColor3);
+	lifeRect.draw(getData().schemeColor2);
+	lifeRect.drawFrame(2, getData().schemeColor3);
+	statsFont(U"ステージ" + Format(stageNum)).draw(495, 15, getData().stringColor);
 	switch (diffNum)
 	{
 	case 0:
@@ -135,18 +135,18 @@ void Game::draw() const
 		statsFont(U"いいえ").draw(495, 66, Palette::Red);
 		break;
 	}
-	statsFont(U"経過時間").draw(495, 132, Color(200, 200, 200));
-	statsFont((!infoMessageFlag ? Format((mainTime.nowTime - mainTime.startTime) / 1000.) : Format(clearTime / 1000.))).draw(495, 183, Color(200, 200, 200));
-	statsFont(U"残り体力").draw(495, 249, Palette::Hotpink);
-	RoundRect(495, 300, 210, 35, 2).draw(Palette::Black);
+	statsFont(U"経過時間").draw(495, 132, getData().stringColor);
+	statsFont((!infoMessageFlag ? Format((mainTime.nowTime - mainTime.startTime) / 1000.) : Format(clearTime / 1000.))).draw(495, 183, getData().stringColor);
+	statsFont(U"残り体力").draw(495, 249, getData().stringColor);
+	RoundRect(495, 300, 210, 35, 2).draw(getData().schemeColor3);
 	RoundRect(495, 300, 210 * playerHP / maxHP, 35, 2).draw((playerHP >= maxHP / 2 ? Palette::Lightgreen : (playerHP >= maxHP / 4 ? Palette::Yellow : Palette::Red)));
 	Game::drawPlayer();
 	Game::drawEnemys();
 	if (infoMessageFlag)
 	{
-		infoMessageRect.draw(Color(255, 255, 255, 120));
+		infoMessageRect.draw(Color(getData().schemeColor3, 150));
 		infoMessageRect.drawFrame(2, 3, (checkPointNum == 0 ? Palette::Yellow : Palette::Darkgray));
-		infoMessageFont(infoMessage).drawAt(infoMessageRect.center(), Color(32, 32, 32));
+		infoMessageFont(infoMessage).drawAt(infoMessageRect.center(), getData().stringColor);
 	}
 }
 
@@ -216,7 +216,7 @@ void Game::updatePlayer()
 		}
 		else
 		{
-			auto dis = (double)cellSize*(playerTime.nowTime - playerTime.startTime) / playerMoveMilliSec;
+			auto dis = (double)cellSize * (playerTime.nowTime - playerTime.startTime) / playerMoveMilliSec;
 			switch (playerMoveFlag)
 			{
 			case 1:
@@ -287,20 +287,20 @@ void Game::updateEnemys()
 		else
 		{
 			enemys[i].moveTime.nowTime = Time::GetMillisec();
-			if ((i == 0 && enemys[i].moveTime.nowTime - enemys[i].moveTime.startTime >= abs(enemys[i].tox - enemys[i].px)*enemyMoveMilliSec[diffNum])
-				|| (i == 1 && enemys[i].moveTime.nowTime - enemys[i].moveTime.startTime >= abs(enemys[i].toy - enemys[i].py)*enemyMoveMilliSec[diffNum]))
+			if ((i == 0 && enemys[i].moveTime.nowTime - enemys[i].moveTime.startTime >= abs(enemys[i].tox - enemys[i].px) * enemyMoveMilliSec[diffNum])
+				|| (i == 1 && enemys[i].moveTime.nowTime - enemys[i].moveTime.startTime >= abs(enemys[i].toy - enemys[i].py) * enemyMoveMilliSec[diffNum]))
 			{
 				enemys[i].px = enemys[i].tox;
 				enemys[i].py = enemys[i].toy;
 				enemys[i].moveFlag = -1;
 				enemys[i].moveDistanceX = enemys[i].moveDistanceY = 0;
 				enemys[i].stayTime.nowTime = enemys[i].stayTime.startTime = Time::GetMillisec();
-				enemys[0].attackLine = Line(44 + enemys[0].px*cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., 10 + enemyImg.height() / 2., 44 + enemys[0].px*cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., gameFieldImg.width() - 44 + enemyImg.height() / 2.);
-				enemys[1].attackLine = Line(10 + enemyImg.width() / 2., 44 + enemys[1].py*cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2., gameFieldImg.height() - 44 + enemyImg.width() / 2., 44 + enemys[1].py*cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2.);
+				enemys[0].attackLine = Line(44 + enemys[0].px * cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., 10 + enemyImg.height() / 2., 44 + enemys[0].px * cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., gameFieldImg.width() - 44 + enemyImg.height() / 2.);
+				enemys[1].attackLine = Line(10 + enemyImg.width() / 2., 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2., gameFieldImg.height() - 44 + enemyImg.width() / 2., 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2.);
 			}
 			else
 			{
-				auto dis = (double)cellSize*(enemys[i].moveTime.nowTime - enemys[i].moveTime.startTime) / enemyMoveMilliSec[diffNum];
+				auto dis = (double)cellSize * (enemys[i].moveTime.nowTime - enemys[i].moveTime.startTime) / enemyMoveMilliSec[diffNum];
 				switch (enemys[i].moveFlag)
 				{
 				case 1:
@@ -328,17 +328,17 @@ void Game::drawEnemys() const
 	{
 		if (enemys[0].moveFlag == -1)
 		{
-			enemys[0].attackLine.draw(8, Palette::Orange);
-			enemys[0].attackLine.draw(5, Palette::Orangered);
+			enemys[0].attackLine.draw(8, Palette::Deepskyblue);
+			enemys[0].attackLine.draw(5, Palette::Lightskyblue);
 		}
 		if (enemys[1].moveFlag == -1)
 		{
-			enemys[1].attackLine.draw(8, Palette::Orange);
-			enemys[1].attackLine.draw(5, Palette::Orangered);
+			enemys[1].attackLine.draw(8, Palette::Deepskyblue);
+			enemys[1].attackLine.draw(5, Palette::Lightskyblue);
 		}
 	}
-	enemyImg.draw(44 + enemys[0].px*cellSize + enemys[0].moveDistanceX, 10);
-	enemyImg.draw(44 + enemys[0].px*cellSize + enemys[0].moveDistanceX, gameFieldImg.width() - 44);
-	enemyImg.draw(10, 44 + enemys[1].py*cellSize + enemys[1].moveDistanceY);
-	enemyImg.draw(gameFieldImg.height() - 44, 44 + enemys[1].py*cellSize + enemys[1].moveDistanceY);
+	enemyImg.draw(44 + enemys[0].px * cellSize + enemys[0].moveDistanceX, 10);
+	enemyImg.draw(44 + enemys[0].px * cellSize + enemys[0].moveDistanceX, gameFieldImg.width() - 44);
+	enemyImg.draw(10, 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY);
+	enemyImg.draw(gameFieldImg.height() - 44, 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY);
 }

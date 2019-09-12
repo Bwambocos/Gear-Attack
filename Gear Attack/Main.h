@@ -5,7 +5,7 @@
 // const
 const int32 windowWidth = 720;
 const int32 windowHeight = 480;
-const String versionStr = U"v1.5";
+const String versionStr = U"v2.0";
 
 // 共有データ
 struct GameData
@@ -14,6 +14,13 @@ struct GameData
 	String playerName = U"名無し", prevScene;
 	int stageListBeginNum = 1, selectedStageNum, selectedDiffNum, bgmNum = 0;
 	bool writeRankingFlag, firstPlayFlag = true, bgmFlag = true, seFlag = true;
+
+	Color schemeColor1 = Color(22, 22, 22);
+	Color schemeColor2 = Color(66, 66, 66);
+	Color schemeColor3 = Color(110, 110, 110);
+	Color schemeColor4 = Color(154, 154, 154);
+	Color schemeColor5 = Color(198, 198, 198);
+	Color stringColor = Color(Palette::White);
 };
 
 using MyApp = SceneManager<String, GameData>;
@@ -39,7 +46,7 @@ public:
 		m_transition.update(ShapeType::mouseOver());
 	}
 
-	void drawHighlight(Color color = Color(255, 255, 255)) const
+	void drawHighlight(Color color = Color(198, 198, 198)) const
 	{
 		ShapeType::drawFrame(0, 2, color);
 		ShapeType::draw(Color(color, (uint32)(m_transition.value() * 64)));
