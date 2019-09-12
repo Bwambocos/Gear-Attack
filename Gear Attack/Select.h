@@ -11,7 +11,7 @@ private:
 	HighlightingShape<Triangle> goUpTrig, goDownTrig;
 	Audio selectSound;
 	Line titleLine, startLine, centerLine;
-	String diffString[4] = { U"‚©‚ñ‚½‚ñ",U"‚Ó‚Â‚¤",U"‚Þ‚¸‚©‚µ‚¢",U"‚¢‚¢‚¦" };
+	String diffString[4] = { U"‚©‚ñ‚½‚ñ",U"‚Ó‚Â‚¤",U"‚Þ‚¸‚©‚µ‚¢",U"•s‰Â”\" };
 	int stageNum;
 
 public:
