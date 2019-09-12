@@ -234,7 +234,9 @@ void Game::updatePlayer()
 			}
 		}
 	}
-	if ((enemys[0].moveFlag == -1 && enemys[0].px == (int)playerX) || (enemys[1].moveFlag == -1 && enemys[1].py == (int)playerY))
+
+	auto playerRect = Rect(44 + cellSize * playerX + playerXMoveDistance, 44 + cellSize * playerY + playerYMoveDistance, cellSize, cellSize);
+	if ((enemys[0].moveFlag == -1 && playerRect.intersects(enemys[0].attackLine)) || (enemys[1].moveFlag == -1 && playerRect.intersects(enemys[1].attackLine)))
 	{
 		playerHP -= attackingEnemyHP[diffNum] / 60;
 		playerHP = Max(playerHP, 0);
@@ -273,7 +275,30 @@ void Game::updateEnemys()
 		if (enemys[i].moveFlag == -1)
 		{
 			enemys[i].stayTime.nowTime = Time::GetMillisec();
-			if (enemys[i].stayTime.nowTime - enemys[i].stayTime.startTime >= enemyStayMilliSec[diffNum]
+			double ratio = Min((double)(enemys[i].stayTime.nowTime - enemys[i].stayTime.startTime) / (double)enemyStayMilliSec[diffNum], 1.);
+			if (i == 0)
+			{
+				if (enemys[i].attackFlag == 0)
+				{
+					enemys[i].attackLine = Line(44 + enemys[0].px * cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., 10 + enemyImg.height() / 2., 44 + enemys[0].px * cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., 10 + enemyImg.height() / 2. + (gameFieldImg.width() - 54) * ratio);
+				}
+				else
+				{
+					enemys[i].attackLine = Line(44 + enemys[0].px * cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., 10 + enemyImg.height() / 2. + (gameFieldImg.width() - 54) * (1 - ratio), 44 + enemys[0].px * cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., 10 + enemyImg.height() / 2. + (gameFieldImg.width() - 54));
+				}
+			}
+			if (i == 1)
+			{
+				if (enemys[i].attackFlag == 0)
+				{
+					enemys[i].attackLine = Line(10 + enemyImg.width() / 2., 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2., 10 + enemyImg.width() / 2. + (gameFieldImg.height() - 54) * ratio, 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2.);
+				}
+				else
+				{
+					enemys[i].attackLine = Line(10 + enemyImg.width() / 2. + (gameFieldImg.height() - 54) * (1 - ratio), 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2., 10 + enemyImg.width() / 2. + (gameFieldImg.height() - 54), 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2.);
+				}
+			}
+			if (enemys[i].stayTime.nowTime - enemys[i].stayTime.startTime >= enemyStayMilliSec[diffNum] * 2
 				&& ((i == 0 && enemys[i].px != playerX) || (i == 1 && enemys[i].py != playerY)))
 			{
 				enemys[i].tox = (int)playerX;
@@ -295,8 +320,10 @@ void Game::updateEnemys()
 				enemys[i].moveFlag = -1;
 				enemys[i].moveDistanceX = enemys[i].moveDistanceY = 0;
 				enemys[i].stayTime.nowTime = enemys[i].stayTime.startTime = Time::GetMillisec();
-				enemys[0].attackLine = Line(44 + enemys[0].px * cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., 10 + enemyImg.height() / 2., 44 + enemys[0].px * cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., gameFieldImg.width() - 44 + enemyImg.height() / 2.);
-				enemys[1].attackLine = Line(10 + enemyImg.width() / 2., 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2., gameFieldImg.height() - 44 + enemyImg.width() / 2., 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2.);
+				enemys[0].attackLine = Line(44 + enemys[0].px * cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., 10 + enemyImg.height() / 2., 44 + enemys[0].px * cellSize + enemys[0].moveDistanceX + enemyImg.width() / 2., 10 + enemyImg.height() / 2.);
+				enemys[1].attackLine = Line(10 + enemyImg.width() / 2., 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2., 10 + enemyImg.width() / 2., 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2.);
+				enemys[0].attackFlag = RandomBool();
+				enemys[1].attackFlag = RandomBool();
 			}
 			else
 			{

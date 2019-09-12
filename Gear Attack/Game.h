@@ -25,7 +25,7 @@ struct enemyData
 	Line attackLine;
 	doubleTime stayTime, moveTime;
 	double moveDistanceX, moveDistanceY;
-	int px, py, tox, toy, moveFlag;
+	int px, py, tox, toy, moveFlag, attackFlag;
 };
 
 // ÉQÅ[ÉÄâÊñ 
