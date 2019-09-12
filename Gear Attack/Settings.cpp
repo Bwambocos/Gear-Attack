@@ -9,10 +9,10 @@ Settings::Settings(const InitData& init) :IScene(init)
 	titleFont = Font(54, Typeface::Bold);
 	choiceFont = Font(36);
 	selectSound = Audio(U"data//Settings//selectSound.wav");
-	goMenuRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 2, Window::Height() - 10 - choiceFont.height() / 2), choiceFont(U"メニューへ戻る").region().w + 30, 36);
-	bgmCheckRect = HighlightingShape<Rect>(Window::Width() - 51, 30 + titleFont.height(), 36, 36);
-	bgmNumRect = HighlightingShape<Rect>(Window::Width() - 51, 45 + titleFont.height() + choiceFont.height(), 36, 36);
-	seCheckRect = HighlightingShape<Rect>(Window::Width() - 51, 60 + titleFont.height() + choiceFont.height() * 2, 36, 36);
+	goMenuRect = HighlightingShape<Rect>(Arg::center(Scene::Width() / 2, Scene::Height() - 10 - choiceFont.height() / 2), choiceFont(U"メニューへ戻る").region().w + 30, 36);
+	bgmCheckRect = HighlightingShape<Rect>(Scene::Width() - 51, 30 + titleFont.height(), 36, 36);
+	bgmNumRect = HighlightingShape<Rect>(Scene::Width() - 51, 45 + titleFont.height() + choiceFont.height(), 36, 36);
+	seCheckRect = HighlightingShape<Rect>(Scene::Width() - 51, 60 + titleFont.height() + choiceFont.height() * 2, 36, 36);
 }
 
 // 設定 更新
@@ -52,7 +52,7 @@ void Settings::draw() const
 	bgmCheckRect.drawHighlight(getData().bgmFlag ? Color(0, 255, 255) : Color(255, 255, 255));
 	seCheckRect.drawHighlight(getData().seFlag ? Color(0, 255, 255) : Color(255, 255, 255));
 	bgmNumRect.drawHighlight(bgmNumRect.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
-	titleFont(U"設定").drawAt(Window::Width() / 2, choiceFont.height(), Palette::Black);
+	titleFont(U"設定").drawAt(Scene::Width() / 2, choiceFont.height(), Palette::Black);
 	choiceFont(U"BGMの有無").draw(15, 30 + titleFont.height(), Palette::Black);
 	if (getData().bgmFlag) choiceFont(U"○").drawAt(bgmCheckRect.center());
 	choiceFont(U"BGMの選択").draw(15, 45 + titleFont.height() + choiceFont.height(), Palette::Black);

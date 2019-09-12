@@ -36,7 +36,7 @@ Game::Game(const InitData& init) :IScene(init)
 	infoRect = Rect(490, 10, 220, 107);
 	timeRect = Rect(490, 127, 220, 107);
 	lifeRect = Rect(490, 244, 220, 96);
-	infoMessageRect = RoundRect(25, 25, Window::Width() - 50, Window::Height() - 50, 10);
+	infoMessageRect = RoundRect(25, 25, Scene::Width() - 50, Scene::Height() - 50, 10);
 	infoMessageFont = Font(72, Typeface::Heavy);
 	statsFont = Font(36, Typeface::Bold);
 	infoMessage = U"ゲームスタート！";

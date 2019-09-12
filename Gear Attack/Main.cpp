@@ -12,9 +12,9 @@
 
 void Main()
 {
-	Window::Resize({ windowWidth,windowHeight }, true);
+	Scene::Resize(windowWidth, windowHeight);
 	Window::SetTitle(U"Gear Attack " + versionStr);
-	Graphics::SetBackground(Palette::Seagreen);
+	Scene::SetBackground(Palette::Seagreen);
 
 	// 使用するシーン
 	MyApp SceneMgr;

@@ -19,5 +19,5 @@ void Rule::update()
 // ‘€ìà–¾ •`‰æ
 void Rule::draw() const
 {
-	mainImg.drawAt(Window::Center());
+	mainImg.drawAt(Scene::Center());
 }

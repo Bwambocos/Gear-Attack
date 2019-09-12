@@ -9,16 +9,16 @@ Ranking::Ranking(const InitData& init) :IScene(init)
 	titleFont = Font(54, Typeface::Bold);
 	choiceFont = Font(28);
 	rankFont = Font(36);
-	goMenuRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4, Window::Height() - 10 - choiceFont.height() / 2), choiceFont(U"メニューへ戻る").region().w + 30, 36);
-	goSelectRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4 * 3, Window::Height() - 10 - choiceFont.height() / 2), choiceFont(U"ゲームへ戻る").region().w + 30, 36);
-	choice1Rect.x = 10; choice1Rect.y = 20 + titleFont.height(); choice1Rect.w = (Window::Width() - 50) / 4; choice1Rect.h = 54;
-	choice2Rect.x = choice1Rect.x + choice1Rect.w + 10; choice2Rect.y = 20 + titleFont.height(); choice2Rect.w = (Window::Width() - 50) / 4; choice2Rect.h = 54;
-	choice3Rect.x = choice2Rect.x + choice2Rect.w + 10; choice3Rect.y = 20 + titleFont.height(); choice3Rect.w = (Window::Width() - 50) / 4; choice3Rect.h = 54;
-	choice4Rect.x = choice3Rect.x + choice3Rect.w + 10; choice4Rect.y = 20 + titleFont.height(); choice4Rect.w = (Window::Width() - 50) / 4; choice4Rect.h = 54;
+	goMenuRect = HighlightingShape<Rect>(Arg::center(Scene::Width() / 4, Scene::Height() - 10 - choiceFont.height() / 2), choiceFont(U"メニューへ戻る").region().w + 30, 36);
+	goSelectRect = HighlightingShape<Rect>(Arg::center(Scene::Width() / 4 * 3, Scene::Height() - 10 - choiceFont.height() / 2), choiceFont(U"ゲームへ戻る").region().w + 30, 36);
+	choice1Rect.x = 10; choice1Rect.y = 20 + titleFont.height(); choice1Rect.w = (Scene::Width() - 50) / 4; choice1Rect.h = 54;
+	choice2Rect.x = choice1Rect.x + choice1Rect.w + 10; choice2Rect.y = 20 + titleFont.height(); choice2Rect.w = (Scene::Width() - 50) / 4; choice2Rect.h = 54;
+	choice3Rect.x = choice2Rect.x + choice2Rect.w + 10; choice3Rect.y = 20 + titleFont.height(); choice3Rect.w = (Scene::Width() - 50) / 4; choice3Rect.h = 54;
+	choice4Rect.x = choice3Rect.x + choice3Rect.w + 10; choice4Rect.y = 20 + titleFont.height(); choice4Rect.w = (Scene::Width() - 50) / 4; choice4Rect.h = 54;
 	goUpTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10, 25, choice1Rect.y + choice1Rect.h + 25, 10, choice1Rect.y + choice1Rect.h + 25);
 	goDownTrig = HighlightingShape<Triangle>(17.5, choice1Rect.y + choice1Rect.h + 10 + rankFont.height() * 5, 10, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5, 25, choice1Rect.y + choice1Rect.h - 5 + rankFont.height() * 5);
 	goLeftTrig = HighlightingShape<Triangle>(10, 35, 60, 10, 60, 60);
-	goRightTrig = HighlightingShape<Triangle>(Window::Width() - 10, 35, Window::Width() - 60, 60, Window::Width() - 60, 10);
+	goRightTrig = HighlightingShape<Triangle>(Scene::Width() - 10, 35, Scene::Width() - 60, 60, Scene::Width() - 60, 10);
 	selectSound = Audio(U"data//Ranking//selectSound.wav");
 	diffNum = getData().selectedDiffNum;
 	stageNum = getData().selectedStageNum;
@@ -138,7 +138,7 @@ void Ranking::draw() const
 {
 	if (!inputNameFlag)
 	{
-		titleFont(U"ステージ" + Format(stageNum)).drawAt(Window::Width() / 2, 10 + titleFont.height() / 2);
+		titleFont(U"ステージ" + Format(stageNum)).drawAt(Scene::Width() / 2, 10 + titleFont.height() / 2);
 		choice1Rect.drawHighlight(diffNum == 0 ? Color(0, 255, 255) : Color(255, 255, 255));
 		choice2Rect.drawHighlight(diffNum == 1 ? Color(0, 255, 255) : Color(255, 255, 255));
 		choice3Rect.drawHighlight(diffNum == 2 ? Color(0, 255, 255) : Color(255, 255, 255));
@@ -149,8 +149,8 @@ void Ranking::draw() const
 		choiceFont(diffStr[1]).drawAt(choice2Rect.center());
 		choiceFont(diffStr[2]).drawAt(choice3Rect.center());
 		choiceFont(diffStr[3]).drawAt(choice4Rect.center());
-		choiceFont(U"メニューへ戻る").drawAt(Window::Width() / 4, Window::Height() - 10 - choiceFont.height() / 2);
-		choiceFont(U"ゲームへ戻る").drawAt(Window::Width() / 4 * 3, Window::Height() - 10 - choiceFont.height() / 2);
+		choiceFont(U"メニューへ戻る").drawAt(Scene::Width() / 4, Scene::Height() - 10 - choiceFont.height() / 2);
+		choiceFont(U"ゲームへ戻る").drawAt(Scene::Width() / 4 * 3, Scene::Height() - 10 - choiceFont.height() / 2);
 		if (rankingBeginNum >= 1) goUpTrig.drawHighlight(goUpTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
 		if (rankingBeginNum + 5 < (signed)rankingData.size()) goDownTrig.drawHighlight(goDownTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
 		if (stageNum > 1) goLeftTrig.drawHighlight(goLeftTrig.mouseOver() ? Color(0, 255, 255) : Color(255, 255, 255));
@@ -159,7 +159,7 @@ void Ranking::draw() const
 		{
 			rankFont(Format(i + 1 + rankingBeginNum) + U"位 " + rankingData[i + rankingBeginNum].second).draw(35, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i, rankingData[i + rankingBeginNum].second == getData().playerName ? Palette::Orange : Palette::White);
 			auto scoreWidth = rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").region().w;
-			rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").draw(Window::Width() - 35 - scoreWidth, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i, rankingData[i + rankingBeginNum].second == getData().playerName ? Palette::Orange : Palette::White);
+			rankFont(Format(rankingData[i + rankingBeginNum].first) + U"点").draw(Scene::Width() - 35 - scoreWidth, choice1Rect.y + choice1Rect.h + 10 + rankFont.height()*i, rankingData[i + rankingBeginNum].second == getData().playerName ? Palette::Orange : Palette::White);
 		}
 	}
 	else drawInputName();
@@ -218,9 +218,9 @@ void Ranking::initInputName()
 	FontAsset::Register(U"nameFont", 42, Typeface::Medium);
 	FontAsset::Register(U"infoFont", 28, Typeface::Medium);
 	FontAsset::Register(U"buttonFont", 24, Typeface::Medium);
-	enterRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4, Window::Height() - 10 - choiceFont.height() / 2), FontAsset(U"infoFont")(U"決定").region().w + 30, 36);
-	twitterRect = HighlightingShape<Rect>(Arg::center(Window::Width() / 4 * 3, Window::Height() - 10 - choiceFont.height() / 2), FontAsset(U"infoFont")(U"ツイートで共有").region().w + 30, 36);
-	maxNameLength = Window::Width() - 70 - rankFont(Format(getData().gameScore) + U"点").region().w - rankFont.height() * 2;
+	enterRect = HighlightingShape<Rect>(Arg::center(Scene::Width() / 4, Scene::Height() - 10 - choiceFont.height() / 2), FontAsset(U"infoFont")(U"決定").region().w + 30, 36);
+	twitterRect = HighlightingShape<Rect>(Arg::center(Scene::Width() / 4 * 3, Scene::Height() - 10 - choiceFont.height() / 2), FontAsset(U"infoFont")(U"ツイートで共有").region().w + 30, 36);
+	maxNameLength = Scene::Width() - 70 - rankFont(Format(getData().gameScore) + U"点").region().w - rankFont.height() * 2;
 }
 
 // 名前入力 更新
@@ -261,7 +261,7 @@ void Ranking::updateInputName()
 // 名前入力 描画
 void Ranking::drawInputName() const
 {
-	FontAsset(U"nameFont")(U"ランキングにのせる名前を入力").drawAt(Window::Width() / 2, 10 + titleFont.height() / 2);
+	FontAsset(U"nameFont")(U"ランキングにのせる名前を入力").drawAt(Scene::Width() / 2, 10 + titleFont.height() / 2);
 	for (const auto& button : charButtons) button.draw();
 	RoundRect(60, 80, 594, 80, 8).draw(Color(240, 250, 255));
 	enterRect.drawHighlight();

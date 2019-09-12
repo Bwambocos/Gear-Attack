@@ -74,7 +74,7 @@ void Menu::draw() const
 	rankingThumb.drawAt(rankingRect.center(), (rankingRect.mouseOver() ? Color(222, 222, 222) : Palette::Gray));
 	startThumb.drawAt(startRect.center(), (startRect.mouseOver() ? Color(222, 222, 222) : Palette::Gray));
 	tutorialThumb.drawAt(tutorialRect.center(), (tutorialRect.mouseOver() ? Color(222, 222, 222) : Palette::Gray));
-	titleFont(U"Gear Attack "+versionStr).drawAt(Window::Width() / 2, 56, Color(222, 222, 222));
+	titleFont(U"Gear Attack "+versionStr).drawAt(Scene::Width() / 2, 56, Color(222, 222, 222));
 	choiceFont(U"スコア\nボード").drawAt(rankingRect.center(), Color(32, 32, 32));
 	choiceFont(U"ゲームに\n進む").drawAt(startRect.center(), Color(32, 32, 32));
 	choiceFont(U"操作\n説明").drawAt(tutorialRect.center(), Color(32, 32, 32));
