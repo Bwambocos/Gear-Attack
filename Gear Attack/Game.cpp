@@ -132,7 +132,7 @@ void Game::draw() const
 		statsFont(U"‚Þ‚¸‚©‚µ‚¢").draw(495, 66, Palette::Orange);
 		break;
 	case 3:
-		statsFont(U"‚¢‚¢‚¦").draw(495, 66, Palette::Red);
+		statsFont(U"•s‰Â”\").draw(495, 66, Palette::Red);
 		break;
 	}
 	statsFont(U"Œo‰ßŽžŠÔ").draw(495, 132, getData().stringColor);
@@ -298,7 +298,7 @@ void Game::updateEnemys()
 					enemys[i].attackLine = Line(10 + enemyImg.width() / 2. + (gameFieldImg.height() - 54) * (1 - ratio), 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2., 10 + enemyImg.width() / 2. + (gameFieldImg.height() - 54), 44 + enemys[1].py * cellSize + enemys[1].moveDistanceY + enemyImg.height() / 2.);
 				}
 			}
-			if (enemys[i].stayTime.nowTime - enemys[i].stayTime.startTime >= enemyStayMilliSec[diffNum] * 2
+			if (enemys[i].stayTime.nowTime - enemys[i].stayTime.startTime >= enemyStayMilliSec[diffNum] * 3 / 2
 				&& ((i == 0 && enemys[i].px != playerX) || (i == 1 && enemys[i].py != playerY)))
 			{
 				enemys[i].tox = (int)playerX;
